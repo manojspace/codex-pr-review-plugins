@@ -1,0 +1,41 @@
+{
+  "name": "pr-review-and-commit",
+  "version": "1.0.0",
+  "description": "Review connected GitHub PRs, apply accepted fixes, commit, push, and summarize each PR.",
+  "author": {
+    "name": "Manoj Swami",
+    "url": "https://github.com/manojspace"
+  },
+  "homepage": "https://github.com/manojspace/codex-pr-review-plugins",
+  "repository": "https://github.com/manojspace/codex-pr-review-plugins",
+  "license": "MIT",
+  "keywords": [
+    "github",
+    "pull-request",
+    "code-review",
+    "delivery"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "PR-Review and Commit",
+    "shortDescription": "Review, fix, push, and summarize linked PRs.",
+    "longDescription": "Reviews connected GitHub pull requests with goal-based task names and portable repository discovery, applies evidence-backed fixes, commits as ai review, non-force pushes to verified PR head branches, and posts an outcome summary on every PR.",
+    "developerName": "Manoj Swami",
+    "category": "Productivity",
+    "capabilities": [
+      "GitHub",
+      "Code Review",
+      "Multi-repo",
+      "Task Naming",
+      "Write",
+      "Git Commit",
+      "PR Comments"
+    ],
+    "websiteURL": "https://github.com/manojspace/codex-pr-review-plugins",
+    "defaultPrompt": [
+      "Use $pr-review-and-commit to review and fix these PRs, commit as ai review, push, and comment on each PR:",
+      "Use $pr-review-and-commit for this connected PR set; fix, commit as ai review, push, and comment on every PR:",
+      "Use $pr-review-and-commit to fix all accepted findings, commit as ai review, push, and comment on these PRs:"
+    ]
+  }
+}

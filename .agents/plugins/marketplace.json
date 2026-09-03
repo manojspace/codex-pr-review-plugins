@@ -1,0 +1,32 @@
+{
+  "name": "pr-review-plugins",
+  "interface": {
+    "displayName": "PR Review Plugins"
+  },
+  "plugins": [
+    {
+      "name": "github-pr-review-fix",
+      "source": {
+        "source": "local",
+        "path": "./plugins/github-pr-review-fix"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "pr-review-and-commit",
+      "source": {
+        "source": "local",
+        "path": "./plugins/pr-review-and-commit"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

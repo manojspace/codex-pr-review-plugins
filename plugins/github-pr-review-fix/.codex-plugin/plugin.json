@@ -1,0 +1,39 @@
+{
+  "name": "github-pr-review-fix",
+  "version": "1.0.0",
+  "description": "Fast GitHub PR review with optional conservative local fixes.",
+  "author": {
+    "name": "Manoj Swami",
+    "url": "https://github.com/manojspace"
+  },
+  "homepage": "https://github.com/manojspace/codex-pr-review-plugins",
+  "repository": "https://github.com/manojspace/codex-pr-review-plugins",
+  "license": "MIT",
+  "keywords": [
+    "github",
+    "pull-request",
+    "code-review",
+    "multi-repo"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "PR Review + Fix",
+    "shortDescription": "Review linked PRs and apply safe fixes.",
+    "longDescription": "Runs a fast PR-first GitHub review workflow with goal-based task names, portable repository discovery, focused first-pass findings, optional deeper review, and conservative local fixes only when explicitly requested or clearly accepted.",
+    "developerName": "Manoj Swami",
+    "category": "Productivity",
+    "capabilities": [
+      "GitHub",
+      "Code Review",
+      "Multi-repo",
+      "Task Naming",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/manojspace/codex-pr-review-plugins",
+    "defaultPrompt": [
+      "Use $github-pr-review-fix to review these PRs. Findings first; no edits unless I ask:",
+      "Use $github-pr-review-fix to review and safely fix these PRs:",
+      "Use $github-pr-review-fix for multi-repo PR review:"
+    ]
+  }
+}

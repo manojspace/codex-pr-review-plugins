@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2 - 2026-09-03
+
+- Prevent operational request wording such as smoke-test or delivery instructions from being mistaken for the PR's implementation goal.
+
 ## 1.0.1 - 2026-09-03
 
 - Fix the public validation workflow setup so repository validation runs in GitHub Actions.

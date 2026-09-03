@@ -104,6 +104,7 @@ def validate_plugin(name: str) -> None:
         "codex_app__set_thread_title",
         "PR Review - <goal>",
         "<N> PRs Review - <goal>",
+        "operational request wording",
     )
     for required in required_naming_text:
         if required not in skill_text:

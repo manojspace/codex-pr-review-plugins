@@ -37,7 +37,7 @@ Re-check each PR head SHA before final output. If a PR was force-pushed during r
 
 After bootstrap metadata is available and before local repository work:
 
-1. Prefer an explicit goal from the user's request.
+1. Prefer an explicit implementation or product outcome for the PR set from the user's request. Ignore operational wording such as review, fix, commit, smoke test, or task naming.
 2. Otherwise infer one shared outcome from all PR titles, bodies, and changed-file inventories.
 3. If no shared outcome is defensible, use the first prompt-ordered PR title as the fallback.
 4. For title-derived fallback text only, remove one leading bracketed or unbracketed ticket token matching `[A-Za-z][A-Za-z0-9]*-\d+`, plus surrounding whitespace and an optional `-`, `:`, `–`, or `—`. Keep the original title when removal would leave an empty string.

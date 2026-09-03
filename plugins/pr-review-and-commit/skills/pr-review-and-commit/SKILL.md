@@ -12,7 +12,7 @@ Use this skill to review a supplied PR set, resolve every accepted finding that 
 After bootstrap metadata and the changed-file list are available, rename the current Codex task once unless the user explicitly says not to:
 
 1. Count distinct PRs after normalizing and deduplicating `{owner, repo, prNumber}` in first-seen order.
-2. Derive one concise goal for the complete PR set. Prefer an explicit goal in the user's request, then a confidently inferred common outcome from PR titles, bodies, and changed files, then the first supplied PR's title.
+2. Derive one concise goal for the complete PR set. Prefer an explicit implementation or product outcome for the PR set stated by the user, then a confidently inferred common outcome from PR titles, bodies, and changed files, then the first supplied PR's title. Do not treat operational request wording such as review, fix, commit, smoke test, or task naming as the PR goal.
 3. Only for a title-derived fallback, strip one leading ticket token matching a bracketed or unbracketed `[A-Za-z][A-Za-z0-9]*-\d+` plus surrounding whitespace and an optional `-`, `:`, `–`, or `—` separator. Never strip ticket-like text elsewhere. If stripping leaves no text, retain the original title.
 4. Use `PR Review - <goal>` for one distinct PR and `<N> PRs Review - <goal>` for more than one.
 5. Call `codex_app__set_thread_title` once with the computed `title` and omit `threadId` so it targets the current task.

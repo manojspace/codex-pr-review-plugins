@@ -1,6 +1,6 @@
 {
   "name": "github-pr-review-fix",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Fast GitHub PR review with optional conservative local fixes.",
   "author": {
     "name": "Manoj Swami",

@@ -5,6 +5,7 @@ These fixtures document the required deterministic title behavior. Goal inferenc
 | Case | Inputs | Expected title |
 | --- | --- | --- |
 | Single PR with explicit goal | One PR; user says the goal is add login authentication | `PR Review - add login authentication` |
+| Operational wording is not the goal | One PR; user requests a title-only smoke test but states no implementation goal; PR title is `Allow plugin installs for backend dependency IDs` | `PR Review - Allow plugin installs for backend dependency IDs` |
 | Two connected PRs | Two distinct PRs with a confidently shared authentication goal | `2 PRs Review - add login authentication` |
 | Five connected PRs | Five distinct PRs with a confidently shared billing migration goal | `5 PRs Review - migrate billing webhooks` |
 | Duplicate URL | The same PR URL supplied twice | A single-PR title beginning with `PR Review -` |

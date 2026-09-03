@@ -22,7 +22,7 @@ codex plugin add github-pr-review-fix@pr-review-plugins
 codex plugin add pr-review-and-commit@pr-review-plugins
 ```
 
-For a release-pinned marketplace, replace `main` with `v1.0.0`.
+For a release-pinned marketplace, replace `main` with `v1.0.1`.
 
 To receive updates from the selected ref:
 

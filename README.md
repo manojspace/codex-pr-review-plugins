@@ -12,7 +12,26 @@ Both plugins give the current Codex task a concise goal-based name after reading
 
 The goal comes from the user's stated objective when available, then a confidently inferred shared outcome, then the first PR title as a fallback. A leading card identifier such as `VD-102 -` is removed only from that title fallback.
 
-## Install
+## Install with the desktop dialog
+
+In the Codex or ChatGPT desktop app, open the Plugins Directory and choose **Add marketplace**. Enter:
+
+| Field | Value |
+| --- | --- |
+| Source | `manojspace/codex-pr-review-plugins` |
+| Git ref | `main` |
+| Sparse paths | Leave blank |
+
+The full Git URL `https://github.com/manojspace/codex-pr-review-plugins.git` also works as the source. To pin a release instead of following updates from `main`, use `v1.0.3` as the Git ref.
+
+After adding it, select the **PR Review Plugins** marketplace and install either or both entries:
+
+- **PR Review + Fix** (`github-pr-review-fix`)
+- **PR-Review and Commit** (`pr-review-and-commit`)
+
+One marketplace exposes both plugins; it does not need to be added twice. Keep **Sparse paths** blank so the marketplace catalog and both plugin directories are fetched. If the new marketplace does not appear immediately, restart the desktop app.
+
+## Install with the CLI
 
 Add the public GitHub marketplace and install either or both plugins:
 
@@ -22,7 +41,7 @@ codex plugin add github-pr-review-fix@pr-review-plugins
 codex plugin add pr-review-and-commit@pr-review-plugins
 ```
 
-For a release-pinned marketplace, replace `main` with `v1.0.2`.
+For a release-pinned marketplace, replace `main` with `v1.0.3`.
 
 To receive updates from the selected ref:
 

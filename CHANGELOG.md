@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.3 - 2026-09-03
+
+- Document desktop-dialog marketplace installation for both plugins, including exact source, Git ref, and sparse-path values.
+- Validate that the public README retains both dialog and CLI installation guidance.
+
 ## 1.0.2 - 2026-09-03
 
 - Prevent operational request wording such as smoke-test or delivery instructions from being mistaken for the PR's implementation goal.

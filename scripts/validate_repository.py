@@ -13,6 +13,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 MARKETPLACE_PATH = ROOT / ".agents/plugins/marketplace.json"
+README_PATH = ROOT / "README.md"
 EXPECTED_PLUGINS = ("github-pr-review-fix", "pr-review-and-commit")
 EXPECTED_REPOSITORY = "https://github.com/manojspace/codex-pr-review-plugins"
 PRIVATE_MARKERS = (
@@ -76,6 +77,23 @@ def validate_marketplace() -> None:
             fail(f"Marketplace source does not exist for {name}")
 
 
+def validate_install_documentation() -> None:
+    readme = README_PATH.read_text(encoding="utf-8")
+    required_text = (
+        "## Install with the desktop dialog",
+        "manojspace/codex-pr-review-plugins",
+        "| Git ref | `main` |",
+        "| Sparse paths | Leave blank |",
+        "PR Review + Fix",
+        "PR-Review and Commit",
+        "## Install with the CLI",
+        "codex plugin marketplace add",
+    )
+    for required in required_text:
+        if required not in readme:
+            fail(f"Missing installation documentation {required!r} in README.md")
+
+
 def validate_plugin(name: str) -> None:
     plugin_root = ROOT / "plugins" / name
     manifest = load_json(plugin_root / ".codex-plugin/plugin.json")
@@ -129,6 +147,7 @@ def validate_plugin(name: str) -> None:
 def main() -> int:
     try:
         validate_marketplace()
+        validate_install_documentation()
         for plugin in EXPECTED_PLUGINS:
             validate_plugin(plugin)
     except (KeyError, TypeError, ValueError) as error:

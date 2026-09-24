@@ -4,6 +4,8 @@ Load this reference after changed-file inventory is known. Use it to complete th
 
 Run all four gates when completing review. Do not collapse them into a shallow checklist.
 
+Use capped searches to locate code, not to establish complete coverage. If a cap hides relevant matches or an enclosing block, narrow the follow-up read before drawing a conclusion; do not expand into unrelated repository-wide inspection.
+
 ## Gate 1: Critical Bugs And Correctness
 
 Look for concrete runtime bugs:
@@ -18,6 +20,22 @@ Look for concrete runtime bugs:
 - broken concurrency or idempotency in handlers, jobs, webhooks, retries, queues, imports, exports, and DB writes.
 
 Trace changed data through callers and consumers, not only the touched function. Verify new conditions against existing domain rules and sibling code paths. A finding must include the behavior risk, changed code path, and smallest concrete fix.
+
+### Enclosing Scopes And Cumulative Budgets
+
+For shared-helper changes, identify affected callers, including callers outside the diff, and inspect the complete enclosing paths needed to understand the changed behavior. Group equivalent callers; inspect distinct paths and the most constrained consumers rather than every unrelated helper or file.
+
+When timeouts, retries, polling, or other bounded work change:
+
+- Identify the effective deadline or resource limit of the enclosing test, request, transaction, or job. Check configuration, local overrides, and environment differences.
+- Include unchanged work on the same reachable path: setup, sequential calls, retry attempts and backoff, navigation, and any hooks or cleanup charged to that budget by the framework. An individual wait being below the outer limit does not establish sufficient headroom.
+- Model achievable elapsed time. Account for shared readiness, concurrent work, early failure, and separately budgeted operations. Do not add maxima across separate tests or assume every wait consumes its ceiling. Shared readiness avoids duplicate delay only while it remains satisfied.
+- Support deadline-exhaustion findings with source establishing a feasible delay scenario, relevant timings, or a focused reproduction. A sum of configured ceilings is a risk signal, not proof. Name the affected caller, effective budget, changed behavior, and remaining work. If evidence is insufficient, state the uncertainty and the smallest useful check rather than presenting a guaranteed failure.
+- Prefer a fix at the affected scope. Do not automatically raise global limits or weaken assertions to make a test pass.
+
+### Evidence For The Claimed Fix
+
+For reliability or resilience changes, identify the failure condition the PR claims to handle and check whether the affected path can now handle it. Healthy runs and green unrelated checks do not demonstrate behavior under that condition. Distinguish source inspection, author-reported results, observed CI coverage, and reproduced behavior. Use the cheapest relevant evidence; this does not authorize running tests or external operations otherwise prohibited by the user or skill. Before recommending approval, disclose any material evidence gap without treating every unrun test as a blocker.
 
 ## Gate 2: Scalability And Performance
 

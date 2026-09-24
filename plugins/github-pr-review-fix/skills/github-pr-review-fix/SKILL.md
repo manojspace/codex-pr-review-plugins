@@ -35,7 +35,7 @@ Default to a fast first pass. Do not load every reference before useful review.
    - fast-forward only when updating an existing branch;
    - never reset, stash, clean, or overwrite;
    - if dirty, diverged, fork-ambiguous, or unsafe, use a clean PR worktree or ask.
-7. Build a changed-file inventory and inspect high-risk hunks first.
+7. Build a changed-file inventory and inspect high-risk hunks first. For changes to timeouts, retries, polling, or shared helpers, apply the enclosing-scope and evidence checks in `references/review-gates.md` before making a finding or approval recommendation.
 8. Run two lightweight first-pass sentinels:
    - error/logging: changed async, IO, network, DB, job, parser, or user action paths for missing try/catch, swallowed errors, weak logging, and misleading success states;
    - contract/inconsistency: changed exports, API routes, event names, payload schemas, env vars, DB columns, generated clients, shared packages, and existing pattern drift.

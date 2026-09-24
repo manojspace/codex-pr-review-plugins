@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.4 - 2026-09-24
+
+- Require both reviewers to trace shared helpers and changed waits, retries, or polling through their enclosing operations and effective budgets.
+- Check realistic cumulative delays, overrides, shared readiness, and separate scopes instead of treating timeout ceilings as elapsed time.
+- Tie resilience conclusions to evidence for the claimed failure condition and distinguish capped searches from complete coverage.
+- Add manual review evaluation cases for cumulative overruns and two false-positive controls; preserve both plugins' existing authorization boundaries.
+
 ## 1.0.3 - 2026-09-03
 
 - Document desktop-dialog marketplace installation for both plugins, including exact source, Git ref, and sparse-path values.

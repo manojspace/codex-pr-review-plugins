@@ -94,7 +94,7 @@ def validate_install_documentation() -> None:
             fail(f"Missing installation documentation {required!r} in README.md")
 
 
-def validate_plugin(name: str) -> None:
+def validate_plugin(name: str) -> str:
     plugin_root = ROOT / "plugins" / name
     manifest = load_json(plugin_root / ".codex-plugin/plugin.json")
     if manifest.get("name") != name:
@@ -132,6 +132,10 @@ def validate_plugin(name: str) -> None:
         if not (skill_path.parent / reference).is_file():
             fail(f"Missing referenced file {reference} in {name}")
 
+    for reference in ("workflow.md", "review-gates.md", "subagents.md", "fix-policy.md"):
+        if not (skill_path.parent / "references" / reference).is_file():
+            fail(f"Missing required reference {reference} in {name}")
+
     for path in plugin_root.rglob("*"):
         if not path.is_file():
             continue
@@ -143,14 +147,32 @@ def validate_plugin(name: str) -> None:
             if marker in text:
                 fail(f"Private marker found in {path.relative_to(ROOT)}")
 
+    return manifest["version"]
+
+
+def validate_review_assets() -> None:
+    gates = [
+        (ROOT / "plugins" / name / "skills" / name / "references/review-gates.md").read_bytes()
+        for name in EXPECTED_PLUGINS
+    ]
+    if gates[0] != gates[1]:
+        fail("Both plugins must use identical review gates")
+
+    for fixture in ("task-title-cases.md", "timeout-review-cases.md", "error-handling-review-cases.md"):
+        path = ROOT / "tests" / fixture
+        if not path.is_file() or not path.read_text(encoding="utf-8").strip():
+            fail(f"Missing or empty review fixture tests/{fixture}")
+
 
 def main() -> int:
     try:
         validate_marketplace()
         validate_install_documentation()
-        for plugin in EXPECTED_PLUGINS:
-            validate_plugin(plugin)
-    except (KeyError, TypeError, ValueError) as error:
+        versions = {validate_plugin(plugin) for plugin in EXPECTED_PLUGINS}
+        if len(versions) != 1:
+            fail("Both plugin versions must match")
+        validate_review_assets()
+    except (KeyError, OSError, TypeError, ValueError) as error:
         print(f"validation failed: {error}", file=sys.stderr)
         return 1
     print("validated marketplace and 2 plugin bundles")

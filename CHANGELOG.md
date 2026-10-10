@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.5 - 2026-10-10
+
+- Trace consequential operations through real success/failure contracts, unchanged callees, partial effects, and retry behavior before clean review conclusions.
+- Independently review local caller–callee contracts and distinguish confirmed defects from fix readiness; guard result/throw conversions and unsafe post-commit error fixes.
+- Require multiline braces for changed JavaScript/TypeScript control-flow and statement bodies, with style findings separate from runtime defects.
+- Add paired failure-handling, safe-control, and formatting evaluations; retain timeout/title coverage and structurally validate shared gates, references, fixtures, and coordinated versions.
+
 ## 1.0.4 - 2026-09-24
 
 - Require both reviewers to trace shared helpers and changed waits, retries, or polling through their enclosing operations and effective budgets.

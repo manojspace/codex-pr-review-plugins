@@ -22,7 +22,7 @@ In the Codex or ChatGPT desktop app, open the Plugins Directory and choose **Add
 | Git ref | `main` |
 | Sparse paths | Leave blank |
 
-The full Git URL `https://github.com/manojspace/codex-pr-review-plugins.git` also works as the source. To pin a release instead of following updates from `main`, use `v1.0.3` as the Git ref.
+The full Git URL `https://github.com/manojspace/codex-pr-review-plugins.git` also works as the source. To pin a release instead of following updates from `main`, use `v1.0.5` as the Git ref.
 
 After adding it, select the **PR Review Plugins** marketplace and install either or both entries:
 
@@ -41,7 +41,7 @@ codex plugin add github-pr-review-fix@pr-review-plugins
 codex plugin add pr-review-and-commit@pr-review-plugins
 ```
 
-For a release-pinned marketplace, replace `main` with `v1.0.3`.
+For a release-pinned marketplace, replace `main` with `v1.0.5`.
 
 To receive updates from the selected ref:
 
@@ -63,6 +63,10 @@ push, and comment on each PR:
 ```
 
 The plugins discover repositories from applicable user or repository instructions first, then from canonical Git remotes in active workspace roots. They use each PR's declared base branch unless instructions override it. Machine- or organization-specific routing belongs in private Codex instructions, not in this public bundle.
+
+Both reviewers trace consequential calls through actual success/failure contracts, including unchanged helpers, returned errors, partial effects, and retries. Clean conclusions require completed material coverage; confirmed defects remain visible when fixes need a decision. Valid best-effort and idempotent outcomes are evaluated by their contracts. Changed JavaScript/TypeScript control-flow and statement bodies must use multiline braces; convention findings are reported separately from runtime defects.
+
+The portable [error-handling cases](tests/error-handling-review-cases.md) and [timeout cases](tests/timeout-review-cases.md) evaluate review reasoning. Their results are instruction-level evidence, not application tests or a guarantee that future reviews will catch every defect.
 
 ## Safety
 

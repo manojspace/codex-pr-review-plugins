@@ -63,13 +63,15 @@ Classify every changed file as source, test, config, migration, generated, binar
 
 Build the connected producer-consumer graph before editing. Include APIs, routes, schemas, migrations, generated clients, packages, environment variables, feature flags, workers, jobs, queues, webhooks, deployment units, and required release order. Cross-repo findings must name both sides of the contract.
 
-Run all review gates and both independent agents. Reconcile findings against direct evidence, then implement every accepted fix across the supplied PR set.
+Track material operation-outcome coverage from `review-gates.md` against exact head SHAs, including unchanged dependencies needed by changed callers. Reinspect affected traces after edits or a head change.
+
+Run all review gates and both independent agents. Reconcile findings against direct evidence, distinguish confirmed defects from fix readiness, then implement every ready, authorized fix across the supplied PR set. Keep confirmed findings with deferred fixes visible. Missing material contracts require a scoped/incomplete conclusion; a clean recommendation requires completed material coverage and no unresolved blocking findings.
 
 ## Inspection And Delivery
 
 For each distinct changed head:
 
-1. Inspect complete worktree status and final diff. Do not run automated validation unless the current request adds it.
+1. Inspect complete worktree status and final diff; recheck affected failure paths, partial state, and retries. Do not run automated validation unless the current request adds it.
 2. Inspect the effective Git hook configuration. If committing would run validation not authorized by the request, stop and ask; never bypass the hook.
 3. Re-fetch and confirm the remote head still equals the reviewed SHA.
 4. Stage only intended files/hunks and inspect the staged diff for unrelated changes or secrets.
@@ -84,11 +86,11 @@ Prepare all connected commits first. Push in evidence-backed dependency order, p
 
 Post one summary comment on every supplied PR after all review, fix, and push attempts reach a final state. Use this structure:
 
-- **Missing:** accepted findings and material deferred findings; say no required change was found when applicable.
+- **Missing:** confirmed findings and fix readiness, including deferred corrections and unresolved material contracts. Say no confirmed finding was found in inspected scope only when supported by completed material coverage.
 - **Done:** changed behavior/files, exact commit SHA/link, and push status; say no commit was created for unchanged PRs.
 - **Validation:** `Reviewed by inspection`; list lint, build, tests, migrations, installs, and code generation not run, plus any checks that mandatory Git hooks actually ran.
 - **Related PRs:** every supplied or evidence-backed linked PR URL, relationship, delivery status, and dependency/release order. Do not invent a relationship.
-- **Remaining risk:** blockers, deferred decisions, CI state, incomplete deliveries, and comment failures.
+- **Remaining risk:** blockers, deferred decisions, material operation-outcome coverage gaps, CI state, incomplete deliveries, and comment failures.
 
 Include the stable hidden marker `<!-- pr-review-and-commit:summary -->`. Inspect existing timeline comments for a marker authored by the authenticated user. Update that plugin-owned comment to the latest final connected-set state instead of posting a duplicate; never trust or edit another author's marker. If the available GitHub interface cannot update comments, post a new summary only when its final content differs and report that idempotent replacement was unavailable.
 

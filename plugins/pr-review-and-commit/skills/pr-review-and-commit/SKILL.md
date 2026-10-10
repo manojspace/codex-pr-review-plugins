@@ -5,7 +5,7 @@ description: Explicit GitHub pull-request review and delivery for one or more co
 
 # PR-Review and Commit
 
-Use this skill to review a supplied PR set, resolve every accepted finding that can be implemented without guessing, deliver the resulting commits to the existing PR head branches, and leave an accurate summary on each PR.
+Use this skill to review a supplied PR set, implement every ready and authorized fix without guessing, deliver the resulting commits to the existing PR head branches, and leave an accurate summary including confirmed findings with deferred fixes on each PR.
 
 ## Task Naming
 
@@ -32,9 +32,9 @@ If the title tool is unavailable or fails, or no reliable goal or usable PR titl
 2. Fetch bootstrap metadata: owner/repo/number, title, body, state, base/head refs and SHAs, head repository/owner, fork status, writable head destination, changed-file list, and current review/check context.
 3. Apply the task-naming rule, then resolve any workspace and comparison-branch overrides from applicable user or repository instructions. Otherwise search the active workspace roots and use the PR's declared base branch.
 4. Locate the local repository by canonical Git remote URL. If no checkout exists, use a disposable clone when safe. Use an isolated disposable worktree for each distinct `{head repository, head ref, head SHA}`; never alter or clean the user's ordinary checkout.
-5. Inventory all changed files and hunks, then build the producer-consumer graph across the supplied PR set. For changes to timeouts, retries, polling, or shared helpers, apply the enclosing-scope and evidence checks in `references/review-gates.md` before making a finding or approval recommendation.
+5. Inventory all changed files and hunks, then build the producer-consumer graph within repositories and across the supplied PR set. Complete the operation-outcome trace in `references/review-gates.md` for changed consequential calls, including unchanged callees. For changes to timeouts, retries, polling, or shared helpers, also apply its enclosing-scope and evidence checks.
 6. Load `references/review-gates.md` and `references/subagents.md`. Run both independent review agents concurrently and reconcile their claims against source evidence.
-7. Load `references/fix-policy.md`, accept or reject each finding, and attempt every accepted fix across the supplied PR set. Ask only when required intent, authority, secrets, or an irreversible product/data decision is unavailable.
+7. Load `references/fix-policy.md`, validate findings separately from fix readiness, and attempt every ready, authorized fix across the supplied PR set. Preserve confirmed findings with deferred fixes. Ask only when required intent, authority, secrets, or an irreversible product/data decision is unavailable.
 8. Review the final status and diff by inspection. Do not run lint, builds, tests, package scripts, installs, migrations, or code generation unless the current request explicitly adds them.
 9. Load `references/workflow.md` and perform the commit, push, and per-PR comment lifecycle only after all editable PRs reach a final local state.
 
@@ -47,12 +47,15 @@ If the title tool is unavailable or fails, or no reliable goal or usable PR titl
 
 ## Non-Negotiables
 
+- Check changed JavaScript/TypeScript control-flow and statement bodies for multiline braces using `references/review-gates.md`; report convention violations separately from correctness findings.
+
 - Treat every distinct supplied PR as part of one connected review set and cover every changed file and text hunk.
 - Honor applicable user or repository routing instructions; otherwise locate repositories by canonical remote in active workspace roots and compare against the declared PR base.
 - Use a disposable clone or worktree when an existing checkout cannot be used safely. Stop rather than guessing about an ambiguous repository, fork, comparison branch, or writable destination.
 - Prefer GitHub connector/MCP metadata and commenting; use authenticated `gh` only as fallback. Stop rather than guess when metadata or a writable head destination cannot be proven.
 - Run two independent concurrent review agents after inventory and before edits. Evidence outranks agent votes.
-- Attempt every accepted finding within the supplied PR set, including coordinated and contract-level fixes, while keeping every changed line traceable to a finding.
+- Attempt every ready, authorized fix within the supplied PR set, including coordinated and contract-level fixes, while keeping every changed line traceable to a confirmed finding. Report confirmed defects even when the fix needs a decision.
+- Awaiting, catching, logging, or matching nearby style does not establish business success. Resolve material failure contracts before a clean conclusion; missing material evidence limits the review.
 - Use isolated worktrees, preserve unrelated work, stage explicit intended paths only, and never create an empty commit.
 - Commit each distinct changed PR head once with the exact subject `ai review`. Preserve the configured Git author.
 - Recheck the remote head immediately before delivery and non-force push only to the verified PR head repository/ref. Never reset, rebase, force-push, bypass hooks, or overwrite concurrent commits.
@@ -61,4 +64,4 @@ If the title tool is unavailable or fails, or no reliable goal or usable PR titl
 
 ## Default Output
 
-Lead with final outcomes by PR. Include accepted and deferred findings, files changed, commit/push status, comment status, related PR relationships and delivery order, inspection-only validation, partial failures, and remaining risk.
+Lead with final outcomes by PR. Include confirmed findings and fix readiness, material operation-outcome coverage and gaps, files changed, commit/push status, comment status, related PR relationships and delivery order, inspection-only validation, partial failures, and remaining risk. A clean conclusion requires completed material coverage and no unresolved blocking findings.

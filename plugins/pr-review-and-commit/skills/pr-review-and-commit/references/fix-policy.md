@@ -1,19 +1,23 @@
 # Fix And Delivery Policy
 
-Load this reference before changing files. The goal is to attempt every accepted finding in the supplied PR set without inventing missing requirements or including unrelated work.
+Load this reference before changing files. The goal is to attempt every ready, authorized fix in the supplied PR set without inventing missing requirements or including unrelated work.
 
-## Finding Acceptance
+## Finding Validity And Fix Readiness
 
-Accept a finding when all are true:
+Validate a finding from the changed path, actual contract, plausible failure trigger, and concrete consequence. Classify it as confirmed, rejected with counterevidence, or unresolved. A confirmed defect remains reportable even if its fix needs a product decision, affects an out-of-scope repository, or cannot currently be delivered.
 
-- the issue is concrete and supported by changed code, callers, tests, schemas, documentation, CI, or an established repository pattern;
+Separately classify its fix as ready, decision-dependent, or outside authorized scope. A fix is ready when all are true:
+
+- the issue is confirmed by direct evidence rather than agent agreement or nearby style alone;
 - the intended result is sufficiently clear to implement without guessing;
 - the change belongs to a supplied PR and can be delivered to its verified head branch;
 - the implementation can be made coherent across every affected supplied PR.
 
-Accepted fixes may include local correctness changes, error handling, performance work, public contracts, schemas, migrations, dependencies, generated artifacts, or coordinated multi-repo changes. Keep the implementation as small and maintainable as the accepted finding allows.
+Ready, authorized fixes may include local correctness changes, error handling, performance work, public contracts, schemas, migrations, dependencies, generated artifacts, or coordinated multi-repo changes. Keep the implementation as small and maintainable as the confirmed finding allows.
 
-Do not accept a proposed fix merely because an agent suggested it. Reject or defer findings that are speculative, unrelated to the PR set, or contradicted by stronger source evidence.
+Do not accept a proposed fix merely because an agent suggested it. Reject unsupported or contradicted claims with evidence; record unresolved evidence gaps separately. Keep confirmed findings with deferred fixes visible in the final review and authorized PR summaries.
+
+Changing returned failures into throws or throws into result values changes a behavioral contract even without a signature change. The same applies to mutation reordering, fail-open/fail-closed behavior, and retry policy. Inspect affected callers and already-completed effects before choosing the smallest coherent correction. A caller-side check that reports failure after committed writes can still invite duplicate effects on retry; do not treat it as a complete fix without that analysis.
 
 ## Stop Conditions
 
@@ -29,13 +33,13 @@ Record blocked findings in the relevant PR comments. Do not silently choose a ri
 
 ## Editing Rules
 
-Before editing, summarize both agent reviews, accepted and rejected findings, open contradictions, intended files, and the inspection plan.
+Before editing, summarize both agent reviews, confirmed/rejected findings, fix readiness, open contradictions, intended files, and the inspection plan.
 
 During editing:
 
 - use a disposable worktree for the exact PR head;
 - preserve unrelated and pre-existing changes;
-- keep every changed line traceable to an accepted finding;
+- keep every changed line traceable to a confirmed finding;
 - make coordinated fixes across supplied PRs when required for contract consistency;
 - do not perform unrelated cleanup, broad modernization, or speculative hardening;
 - do not run lint, builds, tests, package scripts, installs, migrations, or code generation unless the current request explicitly authorizes them.
@@ -46,6 +50,7 @@ After editing:
 - confirm only intended files and hunks are included;
 - state that the changes were reviewed by inspection and list checks not run;
 - rerun an affected review-agent lens when the edits materially change its original conclusion;
+- reinspect affected operation-outcome traces, including completed effects, failure reporting, and retry safety, against the final code;
 - recheck the PR's remote head SHA before staging and again before pushing.
 - inspect the repository's effective Git hooks before committing; if a hook would run validation that the request did not authorize, stop and ask rather than bypassing it;
 

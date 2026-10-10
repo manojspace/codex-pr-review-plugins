@@ -35,11 +35,11 @@ Default to a fast first pass. Do not load every reference before useful review.
    - fast-forward only when updating an existing branch;
    - never reset, stash, clean, or overwrite;
    - if dirty, diverged, fork-ambiguous, or unsafe, use a clean PR worktree or ask.
-7. Build a changed-file inventory and inspect high-risk hunks first. For changes to timeouts, retries, polling, or shared helpers, apply the enclosing-scope and evidence checks in `references/review-gates.md` before making a finding or approval recommendation.
+7. Build a changed-file inventory and inspect high-risk hunks first. Complete the operation-outcome trace in `references/review-gates.md` for changed consequential calls, including unchanged callees. For changes to timeouts, retries, polling, or shared helpers, also apply its enclosing-scope and evidence checks.
 8. Run two lightweight first-pass sentinels:
-   - error/logging: changed async, IO, network, DB, job, parser, or user action paths for missing try/catch, swallowed errors, weak logging, and misleading success states;
+   - failure outcomes: changed async, IO, network, DB, job, parser, or user action paths for lost rejection or returned failure, partial effects, weak observability, and misleading completion;
    - contract/inconsistency: changed exports, API routes, event names, payload schemas, env vars, DB columns, generated clients, shared packages, and existing pattern drift.
-9. Lead with concrete findings as soon as they are defensible. Then finish coverage or trigger deeper review when needed.
+9. Lead with concrete findings as soon as they are defensible. Finish material failure-path coverage before a clean recommendation. For high-impact consequential paths (such as destructive writes, account lifecycle, payments, or job completion), run the two-agent gate before a clean recommendation even when the first pass appears conclusive.
 
 ## Modes
 
@@ -51,10 +51,12 @@ Default to a fast first pass. Do not load every reference before useful review.
 
 - Load `references/workflow.md` only for multi-PR routing, branch drift, dirty/diverged branch handling, exact coverage details, or output rules.
 - Load `references/review-gates.md` after changed-file inventory is known and use it to complete the full review pass.
-- Load `references/subagents.md` only before non-trivial edits or uncertain high-impact conclusions.
+- Load `references/subagents.md` before non-trivial edits, uncertain high-impact conclusions, or a clean recommendation on high-impact consequential paths.
 - Load `references/fix-policy.md` only before editing files.
 
 ## Non-Negotiables
+
+- Check changed JavaScript/TypeScript control-flow and statement bodies for multiline braces using `references/review-gates.md`; report convention violations separately from correctness findings.
 
 - Treat every distinct PR in the prompt as part of one connected review set.
 - Inventory every PR, every changed file, every file status, every text hunk, and every non-text limitation.
@@ -64,9 +66,10 @@ Default to a fast first pass. Do not load every reference before useful review.
 - Do not switch the user's existing checkout when the user explicitly asks for review-only/no checkout, or when the worktree is dirty/diverged/unsafe. Otherwise, safe early PR branch alignment is the default.
 - Do not run `git add`, `git commit`, push, merge, approve, request changes, close, label, lint, build, full tests, package scripts, migrations, installs, or codegen unless the user explicitly asks.
 - Ignore pure permission/authorization findings by default, but still review execution, deployment, executable-bit, CI, and non-permission bugs in permission-touched code.
-- Do not block first-pass findings on subagents. Before any non-trivial edit or uncertain high-impact conclusion, run two independent parallel review agents and reconcile their evidence.
+- Do not block first-pass findings on subagents. Before any non-trivial edit, uncertain high-impact conclusion, or clean recommendation on high-impact consequential paths, run two independent parallel review agents and reconcile their evidence.
+- Awaiting, catching, logging, or matching nearby style does not establish business success. Resolve material failure contracts and preserve confirmed findings even when their fixes need a decision; missing material evidence limits the conclusion.
 - Auto-fix only small, local, reversible, inspection-verifiable issues whose intended behavior is clear.
 
 ## Default Output
 
-Lead with findings ordered by severity. Keep process narration short. Include first-pass scope, deeper-pass triggers found or not found, branch/worktree used, files changed, validation run or skipped, remaining risk, and deferred approval-needed issues. Never claim verification unless validation actually ran; otherwise say reviewed by inspection.
+Lead with findings ordered by severity. Keep process narration short. Include first-pass scope, material operation-outcome coverage and gaps, deeper-pass triggers found or not found, branch/worktree used, files changed, validation run or skipped, remaining risk, and confirmed findings with deferred fixes. Never claim verification unless validation actually ran; otherwise say reviewed by inspection. A clean conclusion requires completed material coverage and no unresolved blocking findings.

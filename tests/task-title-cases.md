@@ -6,9 +6,9 @@ These fixtures document the required deterministic title behavior. Goal inferenc
 | --- | --- | --- |
 | Single PR with explicit goal | One PR; user says the goal is add login authentication | `PR Review - add login authentication` |
 | Operational wording is not the goal | One PR; user requests a title-only smoke test but states no implementation goal; PR title is `Allow plugin installs for backend dependency IDs` | `PR Review - Allow plugin installs for backend dependency IDs` |
-| Two connected PRs | Two distinct PRs with a confidently shared authentication goal | `2 PRs Review - add login authentication` |
-| Five connected PRs | Five distinct PRs with a confidently shared billing migration goal | `5 PRs Review - migrate billing webhooks` |
-| Duplicate URL | The same PR URL supplied twice | A single-PR title beginning with `PR Review -` |
+| Two connected PRs | Two distinct PRs with the explicit shared goal `add login authentication` | `2 PRs Review - add login authentication` |
+| Five connected PRs | Five distinct PRs with the explicit shared goal `migrate billing webhooks` | `5 PRs Review - migrate billing webhooks` |
+| Duplicate URL | The same PR URL supplied twice; no explicit/common goal; PR title is `Improve cache invalidation` | `PR Review - Improve cache invalidation` |
 | Hyphenated card fallback | First PR title is `VD-102 - add auth in login`; no explicit or inferred goal | `PR Review - add auth in login` |
 | Colon card fallback | First PR title is `VD-102: add auth in login`; no explicit or inferred goal | `PR Review - add auth in login` |
 | Bracketed card fallback | First PR title is `[VD-102] add auth in login`; no explicit or inferred goal | `PR Review - add auth in login` |

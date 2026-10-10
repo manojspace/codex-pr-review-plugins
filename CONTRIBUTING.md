@@ -7,6 +7,7 @@ Before opening a pull request:
 1. Update the relevant `SKILL.md` and directly related reference files only.
 2. Keep organization names, usernames, absolute local paths, credentials, and private repository assumptions out of published plugin files.
 3. Update `tests/task-title-cases.md` when task-naming behavior changes.
+   For semantic review-rule changes, update the relevant behavioral fixtures and evaluate both plugins in fresh review-only contexts with expected assessments withheld. Include failure cases and valid controls, preserve existing timeout/title coverage, and record actual outcomes, source/model context, and limitations. Package validation alone does not pass behavioral evaluations.
 4. Run `python3 scripts/validate_repository.py`.
 5. Validate each plugin with the current Codex plugin and skill validation tools.
 

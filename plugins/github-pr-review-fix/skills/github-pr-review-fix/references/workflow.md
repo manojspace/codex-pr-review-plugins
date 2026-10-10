@@ -104,6 +104,8 @@ Classify every changed file:
 
 For text files, inspect every changed hunk and enough surrounding callers/consumers to understand behavior. For generated, binary, large, LFS, or truncated files, record the inspection method or explicit limitation. Track renamed, copied, and deleted files with old and new paths.
 
+Track material operation-outcome coverage from `review-gates.md` against the exact head SHA, including unchanged dependencies needed by changed callers. Reinspect affected traces after edits or a head change. Distinguish confirmed findings, deferred fixes, and unresolved contracts; none can disappear merely because no edit was made.
+
 Pure chmod-only authorization findings are out of scope, but executable-bit changes affecting scripts, package entrypoints, CI, deployment, hooks, or runtime behavior remain in scope.
 
 ## Connected Review Graph
@@ -128,8 +130,8 @@ First pass:
 
 - align to the PR branch when safe;
 - inspect changed-file inventory and risk tags;
-- inspect changed hunks plus nearby callers;
-- run the error/logging sentinel;
+- inspect changed hunks plus relevant callers and unchanged callees;
+- run the failure-outcome sentinel;
 - run the cross-repo contract/inconsistency sentinel;
 - return concrete findings as soon as defensible.
 
@@ -145,6 +147,8 @@ Deep pass triggers:
 - non-trivial fixes;
 - explicit exhaustive review request.
 
+Before a clean recommendation on high-impact consequential paths, run the two-agent gate even when the first pass seems conclusive. Routine low-risk reviews remain lightweight. Early findings do not imply completed coverage.
+
 ## Final Output
 
 Return:
@@ -155,5 +159,7 @@ Return:
 - files changed, if any;
 - validation run or skipped by policy;
 - remaining risk and deferred approval-needed issues.
+
+Include compact material outcome coverage and specific gaps, not the entire internal trace ledger. A clean recommendation requires completed material coverage and no unresolved blocking findings. Confirmed defects remain visible when fixes need decisions; missing material contracts require a scoped/incomplete conclusion. Unrun unrelated tests alone do not invalidate an inspection-based review.
 
 Do not say "verified" unless validation actually ran. Use "reviewed by inspection" when lint/build/tests were intentionally not run.

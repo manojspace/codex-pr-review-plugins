@@ -1,65 +1,26 @@
-# Mandatory Two-Agent Review Gate
+# Mandatory Two-Lens Independent Review
 
-Load this reference after the changed-file inventory and connected-PR graph are available. Complete this gate before any edit on every run.
+Load after inventory/relationship mapping. Two complementary independent review lenses remain the default for every delivery-plugin run and must complete before edits or a clean/ready conclusion. This requirement is not relaxed by small diffs or an internal cost target. Do not delay defensible first-pass findings.
 
-## Independent Concurrent Lenses
+## Independent Lenses And Briefs
 
-Start two agents concurrently with neutral prompts and the same relevant raw artifacts. Do not pass one agent's output or a preferred conclusion to the other.
+Use fresh minimal context (`fork_turns="none"` where supported), not inherited full conversation. At most two review lenses may run concurrently. Give neutral briefs with the request/success criteria, action and validation boundaries, canonical PR identity, pinned objects/comparisons, raw artifact/hunk references, required contract entry points, relevant trusted instructions, and loaded reference paths. Include the smallest producer/consumer context needed; agents may challenge scope and request omitted evidence. Do not supply expected findings, a preferred conclusion, or another lens's output. Do not spawn user-visible chats for review subtasks.
 
-Agent A reviews:
+- **Lens A:** correctness, security of reachable effects, scalability, failure outcomes, retries, partial effects, idempotency, and observability. Trace forward from actor/input and producer outcomes through caller decisions, completed/pending effects, response/ack, and recovery.
+- **Lens B:** contracts, authorization/tenant boundaries, API/schema/package drift, configuration/deployment, and existing-code consistency. Work backward from required success conditions through local/cross-repository callers and unchanged callees, including returned versus thrown failure. Check consumer and recovery evidence independently.
 
-- correctness and runtime behavior;
-- scalability and performance;
-- async flow, retries, partial failures, and idempotency;
-- error handling, logging, and observability.
+For one verifier, choose the lens addressing the material uncertainty and state its scope. Review core risks first, then only triggered domain references. Soft read/call guidance is not a completeness cutoff; use bounded artifact windows and disclose inaccessible evidence.
 
-Trace material failures forward from producer outcomes through caller decisions, completed/pending effects, and the final response or acknowledgment.
+## Required Evidence And Adjudication
 
-Agent B reviews:
+Require findings, direct evidence and counterevidence, files/hunks inspected, material outcome coverage, unknowns, suggested correction/validation, checks run, files changed (normally none), and confidence/remaining risk. Calibrate severity with `review-gates.md`. Separate confirmed defects from unresolved contracts and decision-dependent fixes. Hypothetical behavior of an unavailable helper is a gap, not a confirmed additional defect. A no-findings result counts only with inspected scope and limitations; incomplete material coverage cannot support an unqualified clean conclusion.
 
-- cross-repo contracts and schema/API drift;
-- generated clients and package contracts;
-- environment and deployment configuration;
-- release order and existing-code inconsistency.
+Evidence outranks votes. Inspect disputed source, schemas, runtime tests, checks, and remote state directly. Preserve independent perspectives until both finish. Reject unsupported claims with counterevidence; unresolved high-impact contradictions block the affected ready/clean conclusion, not unrelated confirmed findings. Ask only if user intent/authority is actually missing after available investigation.
 
-Independently work backward from required success conditions through local and cross-repository caller–callee contracts, including unchanged dependencies and return-versus-throw behavior. Verify whether the inspected consumers support the claimed outcome and retry behavior.
+## Retry And Invalidation
 
-## Artifact Bundle
+Retry only a failed/timed-out lens, once, with a narrower fresh brief; retain a successful independent lens. Never launch a replacement pair for one failure or rerun merely to obtain agreement. Distinguish failure retries from evidence invalidation. After edits, head/base changes, or material contract/config/policy changes, rerun only invalidated evidence/lenses. Allow one automatic affected-evidence rerun; further material change leaves that gate outstanding. A rerun limit never permits stale delivery or an unqualified clean conclusion.
 
-Pass only relevant artifacts:
+Before edits, record compact verifier statuses, confirmed/rejected/unresolved findings, fix readiness, contradictions, scope, and required validation. Reuse unaffected pinned evidence, not path-only or prior-comment verdicts.
 
-- user request and authorization boundaries;
-- PR URLs and metadata snapshot;
-- routing decisions and exact base/head SHAs;
-- changed-file inventory and targeted diffs;
-- connected producer-consumer graph;
-- relevant repository instructions, callers, contracts, schemas, tests, CI, comments, and validation constraints.
-- unchanged callees and outcome-transforming wrappers needed to resolve consequential calls.
-
-Avoid full repository dumps and unrelated files.
-
-## Required Agent Output
-
-Require each agent to return:
-
-- findings ordered by severity;
-- direct evidence and affected PR/file;
-- files and context inspected;
-- suggested fix;
-- unknowns, blind spots, and confidence.
-
-Include compact operation-outcome coverage, missing material contracts, and counterevidence for apparent best-effort or idempotent cases. Distinguish a confirmed finding from uncertainty about its fix. Before confirming a finding, identify the inspected producer and consumer/recovery evidence; hypothetical rejection of an unavailable helper is a coverage gap, not an additional confirmed defect. A no-findings opinion without completed material coverage cannot support an unqualified clean recommendation.
-
-A no-findings response counts only when it states what was inspected and what remains unverified.
-
-## Retry And Recheck
-
-Wait for both agents before editing. If either agent times out or fails, launch a fresh concurrent replacement pair with a narrower artifact bundle. If two independent agent results still cannot be obtained, stop before edits or delivery and ask the user; do not substitute a manual lens for the required independent review.
-
-After edits, rerun only a lens whose conclusion may have changed materially. Do not rerun agents merely to obtain agreement.
-
-## Adjudication
-
-Do not use majority vote. Source code, schemas, tests, CI, GitHub state, and reproducible command output outrank agent claims. Inspect cited evidence directly. If a high-impact contradiction remains unresolved, stop that fix and ask the user.
-
-Before editing, record both agent statuses, confirmed/rejected findings, fix readiness, contradictions, fix scope, and inspection plan.
+Wait for both required results. If a required lens is still unavailable after its single retry, stop affected edits/delivery, preserve confirmed findings and prepared state, and report the missing verification. Manual inspection cannot be represented as the required independent lens. Exhausted reruns, unavailable evidence, or unresolved material contradictions never authorize stale delivery.

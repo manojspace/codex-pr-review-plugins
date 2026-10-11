@@ -1,69 +1,31 @@
 # Fix And Delivery Policy
 
-Load this reference before changing files. The goal is to attempt every ready, authorized fix in the supplied PR set without inventing missing requirements or including unrelated work.
+Load before edits or delivery. Attempt every ready, authorized correction in the supplied PR set; do not invent missing intent or include unrelated changes. Editing, staging, committing, pushing, commenting, and validation have independent authorization.
 
 ## Finding Validity And Fix Readiness
 
-Validate a finding from the changed path, actual contract, plausible failure trigger, and concrete consequence. Classify it as confirmed, rejected with counterevidence, or unresolved. A confirmed defect remains reportable even if its fix needs a product decision, affects an out-of-scope repository, or cannot currently be delivered.
+Validate each finding from the changed path, actual contract, credible trigger, and concrete consequence: confirmed, rejected with counterevidence, or unresolved. Separately classify its correction as ready, decision-dependent, or outside authorized scope. A confirmed defect remains reportable when its fix cannot safely be chosen, validated, or delivered.
 
-Separately classify its fix as ready, decision-dependent, or outside authorized scope. A fix is ready when all are true:
+Ready requires known intended behavior, action-specific authority, coherent affected contracts, and adequate verification for the risk. Nearby style, an agent vote, and “reviewed by inspection” alone do not establish runtime safety. Preserve standing session permission; do not demand magic category wording or repeat granted authorization. A missing product/security/data decision or prohibited/unavailable required check blocks readiness, not finding validity. Continue independent authorized work and preserve a concrete proposed patch where appropriate.
 
-- the issue is confirmed by direct evidence rather than agent agreement or nearby style alone;
-- the intended result is sufficiently clear to implement without guessing;
-- the change belongs to a supplied PR and can be delivered to its verified head branch;
-- the implementation can be made coherent across every affected supplied PR.
+## Impact And Verification
 
-Ready, authorized fixes may include local correctness changes, error handling, performance work, public contracts, schemas, migrations, dependencies, generated artifacts, or coordinated multi-repo changes. Keep the implementation as small and maintainable as the confirmed finding allows.
+Public API, schema/data/migrations, security/privacy/billing, dependencies/lockfiles, generated artifacts, and alert semantics require explicit impact analysis. Inspect affected callers, consumers, rollout/rollback constraints, and authoritative provenance; load the triggered domain reference. These categories do not automatically require renewed approval when behavior, scope, and validation are already authorized. Reading a dependency does not add its repository to fix scope.
 
-Do not accept a proposed fix merely because an agent suggested it. Reject unsupported or contradicted claims with evidence; record unresolved evidence gaps separately. Keep confirmed findings with deferred fixes visible in the final review and authorized PR summaries.
+Returned-failure/throw conversions, global throw helpers, fail-open/fail-closed changes, mutation reordering, and retries alter behavioral contracts even without signature changes. Trace completed effects and recovery before applying them. A late caller-side error after committed writes may duplicate effects on retry. Match actual logging/alert/correlation/redaction contracts; multiple causal-stage or audit records are not automatically duplicate logging, and copying a sibling can reproduce its defect.
 
-Changing returned failures into throws or throws into result values changes a behavioral contract even without a signature change. The same applies to mutation reordering, fail-open/fail-closed behavior, and retry policy. Inspect affected callers and already-completed effects before choosing the smallest coherent correction. A caller-side check that reports failure after committed writes can still invite duplicate effects on retry; do not treat it as a complete fix without that analysis.
+Choose the cheapest meaningful authorized check for the changed behavior. Required runtime validation must exercise the actual path with the established runner; do not substitute extracted source slicing/re-evaluation. Text assertions can be appropriate for generators, codemods, or parsers. Reuse existing tests/factories, avoid oversized scaffolds or implementation-mirroring tests, and do not require irrelevant full suites. A requested test edit can remain unrun under a no-execution constraint, but must be labeled unrun and cannot satisfy a required delivery check.
 
-## Stop Conditions
+If required validation is prohibited or unavailable, retain the proposed patch/finding and state the exact gap. Inspection cannot convert an unvalidated consequential correction into a ready fix. Report checks actually run, their revision, and limitations; never claim verification merely from reading code.
 
-Stop and ask only when completion requires:
+## Surgical Editing
 
-- a product or business decision not established by the supplied code or PR context;
-- credentials, secrets, permissions, or a writable Git destination that are unavailable;
-- an irreversible or destructive data action whose exact intent and rollback are unspecified;
-- changing a repository or PR that the user did not place in scope;
-- choosing between materially different contract or release behaviors with no authoritative evidence.
+Before non-trivial edits, summarize confirmed findings/readiness, verifier status, intended files, and required validation. Use a suitable isolated worktree pinned to the reviewed head; preserve unrelated work and ordinary checkouts. Every changed line must address a confirmed finding. Prefer existing patterns, direct control flow, strong types, and the smallest correction. No broad extraction, speculative validation layers, schema/artifact churn, unrelated cleanup, or new abstraction to satisfy a checklist. Preserve the multiline-braces rule from `review-gates.md`.
 
-Record blocked findings in the relevant PR comments. Do not silently choose a risky interpretation.
+After edits, inspect status and the final diff, re-trace effects/failure/retry behavior, rerun only invalidated verification, and record validation against the actual final revision. Preserve confirmed deferred findings. Report changed behavior/files, checks run or skipped with reasons, remaining compile/runtime risk, and specific unresolved decisions.
 
-## Editing Rules
+## Delivery Readiness
 
-Before editing, summarize both agent reviews, confirmed/rejected findings, fix readiness, open contradictions, intended files, and the inspection plan.
+Ready corrections may span authorized local, contract, schema, dependency, generated-artifact, or coordinated changes only when impact and required verification are established. Unavailable credentials, unknown writable destination, ambiguous intent, out-of-scope dependencies, or unspecified destructive data behavior stop that affected action. Make the proposed result concrete with available authorized preparation before asking for a missing decision.
 
-During editing:
-
-- use a disposable worktree for the exact PR head;
-- preserve unrelated and pre-existing changes;
-- keep every changed line traceable to a confirmed finding;
-- make coordinated fixes across supplied PRs when required for contract consistency;
-- do not perform unrelated cleanup, broad modernization, or speculative hardening;
-- do not run lint, builds, tests, package scripts, installs, migrations, or code generation unless the current request explicitly authorizes them.
-
-After editing:
-
-- inspect `git status`, the unstaged diff, and the staged diff;
-- confirm only intended files and hunks are included;
-- state that the changes were reviewed by inspection and list checks not run;
-- rerun an affected review-agent lens when the edits materially change its original conclusion;
-- reinspect affected operation-outcome traces, including completed effects, failure reporting, and retry safety, against the final code;
-- recheck the PR's remote head SHA before staging and again before pushing.
-- inspect the repository's effective Git hooks before committing; if a hook would run validation that the request did not authorize, stop and ask rather than bypassing it;
-
-## Commit And Push Rules
-
-- Deduplicate PRs sharing the same verified head repository, ref, and SHA into one worktree and one delivery.
-- Stage explicit intended paths only. Never use staging that could capture unrelated files without first proving the complete status is clean and intended.
-- Never create an empty commit. Unchanged PRs still receive a review summary.
-- Create one commit per distinct changed PR head with the exact subject `ai review` and no generated body. Preserve the configured author identity.
-- After hooks finish, inspect worktree status, the commit's complete diff and name-status, its parent/tree, and its full message. Stop unless the committed paths and content are exactly intended, the subject is exactly `ai review`, and the body is empty.
-- Push without force to the exact verified PR head repository/ref. For forks, prove the fork destination is writable and do not add a permanent remote.
-- Never reset, rebase, force-push, bypass hooks, delete branches, create replacement PRs, merge, approve, request changes, close, or label.
-- Prepare all connected changes before delivery, then push producers before dependent consumers. If a producer fails, do not push its dependent consumers; independent PRs may continue.
-- Recheck that the remote PR head resolves to the pushed commit before describing delivery as successful.
-
-Cross-repository delivery is not atomic. Do not roll back a successful push because another push or comment failed; report the exact partial state instead.
+Complete both independent lenses and required final-revision checks. Use `workflow.md` as the authoritative lifecycle for shared heads, exact staged paths, `ai review` commits, hook results, state/base/head rechecks, non-force push races, round-aware comments, partial delivery, and recoverable cleanup. Do not duplicate or weaken those gates here. Comment failures retry only comments; preserve published and unpublished work after partial delivery.

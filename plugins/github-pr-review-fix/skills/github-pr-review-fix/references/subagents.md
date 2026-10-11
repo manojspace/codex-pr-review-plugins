@@ -1,85 +1,32 @@
-# Two-Agent Review Gate
+# Risk-Adaptive Independent Review
 
-Load this reference before non-trivial edits, uncertain high-impact conclusions, or a clean recommendation on high-impact consequential paths. Do not block first-pass findings on subagents.
+Load before fixes or clean/ready conclusions when risk requires independence. Do not delay defensible first-pass findings.
 
-Run this gate before any non-trivial edit, broad fix recommendation, or high-risk conclusion that remains uncertain after direct source inspection. Also run it before a clean recommendation on consequential paths such as destructive writes, account lifecycle, payments, or job completion, even when the first pass appears conclusive.
+- Low-risk, self-contained review or local correction with complete direct evidence may use no subagent.
+- Moderate material uncertainty uses one independent verifier focused on the uncertain contract/path.
+- Privileged/destructive, account, payment, schema, or cross-boundary paths require two complementary independent lenses before a clean/ready conclusion or consequential fix, even for a one-line change.
 
-## Independent Lenses
+Line count informs cost, never risk exemption. Non-trivial edits require an explicit risk classification and adequate verification; do not automatically classify a small diff as low risk.
 
-Start two parallel agents with neutral prompts and raw artifacts only.
+## Independent Lenses And Briefs
 
-Agent A lens:
+Use fresh minimal context (`fork_turns="none"` where supported), not inherited full conversation. At most two review lenses may run concurrently. Give neutral briefs with the request/success criteria, action and validation boundaries, canonical PR identity, pinned objects/comparisons, raw artifact/hunk references, required contract entry points, relevant trusted instructions, and loaded reference paths. Include the smallest producer/consumer context needed; agents may challenge scope and request omitted evidence. Do not supply expected findings, a preferred conclusion, or another lens's output. Do not spawn user-visible chats for review subtasks.
 
-- correctness;
-- scalability;
-- error handling;
-- retries;
-- partial failures;
-- idempotency;
-- logging and observability.
+- **Lens A:** correctness, security of reachable effects, scalability, failure outcomes, retries, partial effects, idempotency, and observability. Trace forward from actor/input and producer outcomes through caller decisions, completed/pending effects, response/ack, and recovery.
+- **Lens B:** contracts, authorization/tenant boundaries, API/schema/package drift, configuration/deployment, and existing-code consistency. Work backward from required success conditions through local/cross-repository callers and unchanged callees, including returned versus thrown failure. Check consumer and recovery evidence independently.
 
-Trace material failures forward from producer outcomes through caller decisions, completed/pending effects, and the final response or acknowledgment.
+For one verifier, choose the lens addressing the material uncertainty and state its scope. Review core risks first, then only triggered domain references. Soft read/call guidance is not a completeness cutoff; use bounded artifact windows and disclose inaccessible evidence.
 
-Agent B lens:
+## Required Evidence And Adjudication
 
-- cross-repo contracts;
-- schema/API drift;
-- generated clients;
-- env/config mismatch;
-- release order;
-- existing-code inconsistency.
+Require findings, direct evidence and counterevidence, files/hunks inspected, material outcome coverage, unknowns, suggested correction/validation, checks run, files changed (normally none), and confidence/remaining risk. Calibrate severity with `review-gates.md`. Separate confirmed defects from unresolved contracts and decision-dependent fixes. Hypothetical behavior of an unavailable helper is a gap, not a confirmed additional defect. A no-findings result counts only with inspected scope and limitations; incomplete material coverage cannot support an unqualified clean conclusion.
 
-Independently work backward from required success conditions through local and cross-repository caller–callee contracts, including unchanged dependencies and return-versus-throw behavior. Verify whether the inspected consumers support the claimed outcome and retry behavior.
+Evidence outranks votes. Inspect disputed source, schemas, runtime tests, checks, and remote state directly. Preserve independent perspectives until both finish. Reject unsupported claims with counterevidence; unresolved high-impact contradictions block the affected ready/clean conclusion, not unrelated confirmed findings. Ask only if user intent/authority is actually missing after available investigation.
 
-Do not pass one agent's output to the other. Do not give either agent a preferred conclusion.
+## Retry And Invalidation
 
-## Artifact Bundle
+Retry only a failed/timed-out lens, once, with a narrower fresh brief; retain a successful independent lens. Never launch a replacement pair for one failure or rerun merely to obtain agreement. Distinguish failure retries from evidence invalidation. After edits, head/base changes, or material contract/config/policy changes, rerun only invalidated evidence/lenses. Allow one automatic affected-evidence rerun; further material change leaves that gate outstanding. A rerun limit never permits stale delivery or an unqualified clean conclusion.
 
-Pass only relevant artifacts:
+Before edits, record compact verifier statuses, confirmed/rejected/unresolved findings, fix readiness, contradictions, scope, and required validation. Reuse unaffected pinned evidence, not path-only or prior-comment verdicts.
 
-- user request and success criteria;
-- PR URLs and metadata snapshot;
-- org routing decision;
-- changed-file inventory;
-- targeted diffs/hunks;
-- relevant `AGENTS.md` instructions;
-- relevant contracts, schemas, routes, env/config, package manifests, generated-client context, tests, logs, or CI status;
-- unchanged callees and outcome-transforming wrappers needed to resolve consequential calls;
-- validation constraints and commands already run.
-
-Avoid full repo dumps. Prefer targeted diffs and surrounding code.
-
-## Required Agent Output
-
-Require each agent to return:
-
-- findings ordered by severity;
-- evidence;
-- files inspected;
-- unknowns and blind spots;
-- suggested fix or validation;
-- confidence.
-
-Include compact operation-outcome coverage, missing material contracts, and counterevidence for apparent best-effort or idempotent cases. Distinguish a confirmed finding from uncertainty about its fix. Before confirming a finding, identify the inspected producer and consumer/recovery evidence; hypothetical rejection of an unavailable helper is a coverage gap, not an additional confirmed defect. A no-findings opinion without completed material coverage cannot support an unqualified clean recommendation.
-
-A "no findings" response only counts if it lists what was inspected and what remains unverified.
-
-## Retry And Fallback
-
-Wait for both agents before non-trivial fixes. If one times out, retry once with a narrower artifact bundle. If it still fails, manually perform that lens and disclose reduced independence.
-
-If code changes materially after agent review, rerun only the affected lens when the change could alter that lens's conclusion.
-
-## Adjudication
-
-Do not use majority vote. Source code, schemas, tests, CI output, and reproducible command output outrank agent claims. For contradictions, inspect cited evidence directly. If a high-impact contradiction remains unresolved, ask the user before fixing.
-
-Before editing, summarize:
-
-- Agent A status;
-- Agent B status;
-- confirmed findings and fix readiness;
-- rejected findings;
-- open contradictions;
-- fix scope;
-- validation plan or validation intentionally skipped.
+If an optional verifier is unavailable, manually inspect that scope and disclose reduced independence. If a risk-required verifier remains unavailable after its one retry, retain confirmed findings and any proposal but withhold the affected clean/ready conclusion or consequential edit; do not claim the independent gate completed.

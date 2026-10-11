@@ -1,25 +1,16 @@
 # Review Gates
 
-Load this reference after changed-file inventory is known. Use it to complete the review pass; do not block branch alignment or first changed-hunk inspection on this file.
+Load after changed-file inventory is known. Complete every gate on the pinned review snapshot; load domain references only for changed behavior or unresolved contracts they cover.
 
-Run all four gates when completing review. Do not collapse them into a shallow checklist.
+Record material paths as `actor/input → guard/contract → outcomes → committed/pending effects → response/ack → recovery/consumer`. Do not replace tracing with a checklist.
 
-Use capped searches to locate code, not to establish complete coverage. If a cap hides relevant matches or an enclosing block, narrow the follow-up read before drawing a conclusion; do not expand into unrelated repository-wide inspection.
+Caps locate code, not complete coverage. If output hides relevant matches/blocks, narrow the next read; avoid unrelated repository-wide inspection.
 
 ## Gate 1: Critical Bugs And Correctness
 
-Look for concrete runtime bugs:
+Look for crashes, data loss, wrong branching/identifiers/defaults, invalid null assumptions, lost promises, races, stale state, duplicate processing, partial writes and user-visible regressions. Check concurrency and idempotency in affected requests, jobs and writes.
 
-- crashes and data loss;
-- incorrect branching, wrong identifiers, and incorrect defaults;
-- broken async flow, missing `await`, missing `return`, and lost promises;
-- race conditions, stale state, duplicate processing, and state corruption;
-- partial writes and missing rollback;
-- invalid null/undefined assumptions;
-- user-visible regressions;
-- broken concurrency or idempotency in handlers, jobs, webhooks, retries, queues, imports, exports, and DB writes.
-
-Trace changed data through callers and consumers, not only the touched function. Verify new conditions against existing domain rules and sibling code paths. A finding must include the behavior risk, changed code path, and smallest concrete fix.
+Trace changed data through affected callers/consumers and domain rules. Establish the changed path, concrete consequence and smallest correction.
 
 ### Enclosing Scopes And Cumulative Budgets
 
@@ -35,42 +26,17 @@ When timeouts, retries, polling, or other bounded work change:
 
 ### Evidence For The Claimed Fix
 
-For reliability or resilience changes, identify the failure condition the PR claims to handle and check whether the affected path can now handle it. Healthy runs and green unrelated checks do not demonstrate behavior under that condition. Distinguish source inspection, author-reported results, observed CI coverage, and reproduced behavior. Use the cheapest relevant evidence; this does not authorize running tests or external operations otherwise prohibited by the user or skill. Before recommending approval, disclose any material evidence gap without treating every unrun test as a blocker.
+For reliability changes, check the claimed failure condition; healthy runs do not prove resilience. Distinguish inspection, author reports, observed CI and reproduction. Verify tested revision, runner discovery, paths/filters and real assertions: unawaited assertions, zero matching tests, mocks removing safeguards or fork CI on another tree can invalidate evidence. Identify skipped/cancelled/flaky/stale/lint-only checks. Documented manual/direct tests can supply evidence without package scripts; unexecuted source supplies intent. Use cheap relevant checks within authorization; disclose material gaps, not every unrun test as a blocker.
 
 ## Gate 2: Scalability And Performance
 
-Search for new load-sensitive risks:
-
-- N+1 queries;
-- unbounded loops, unpaginated fetches, broad DB filters, or missing limits;
-- large in-memory transforms or payload growth;
-- repeated network calls;
-- hot-path logging;
-- inefficient cache invalidation or cache-key drift;
-- missing indexes for new query paths;
-- fan-out work added to request paths.
-
-Compare new data access with existing repository conventions. Check whether pagination, batching, caching, debounce/throttle, background processing, or query limits already exist nearby and should be preserved.
-
-For frontend changes, inspect render loops, memoization-sensitive paths, expensive selectors, repeated API calls, bundle-affecting imports, and large table/list behavior.
-
-Only report performance findings that matter under realistic load. Explain the load path and impact.
+Inspect N+1 queries, unbounded work/fetches, broad filters, payload/memory growth, repeated calls, hot-path logs, cache/index drift and request fan-out. Preserve effective batching/caching/limits. Use `database-runtime.md` or `frontend.md` for affected query/render paths. Require realistic load and consequence.
 
 ## Gate 3: Failure Outcomes, Handling, And Observability
 
-Inspect every changed:
+Inspect changed async boundaries, network/DB/file operations, jobs/webhooks, parsers/serializers, provider calls and user actions.
 
-- async boundary;
-- network call;
-- DB call;
-- file operation;
-- queue/job handler;
-- webhook handler;
-- parser/serializer;
-- payment or external API call;
-- user-triggered action.
-
-Follow nearby representation conventions, but establish correctness independently: an existing pattern can also discard failures. A result object, propagated rejection, or caller-owned error boundary can be correct; do not require a local catch or a thrown error everywhere.
+Establish correctness independently of conventions. Result objects, propagated rejections and caller-owned boundaries can all be correct; local catches or throws are not universally required.
 
 ### Required Operation-Outcome Trace
 
@@ -81,20 +47,20 @@ Keep a compact internal record per distinct behavior, pinned to the reviewed hea
 `call site → implementation/contract → outcomes → caller handling → completed/pending effects → response/commit/ack → evidence or uncertainty`
 
 1. Identify the promised success condition and observable completion boundary. An intermediate database commit does not prove that the overall operation succeeded.
-2. Read the actual callee and outcome-transforming wrappers, including unchanged dependencies, catches, and cleanup. Use the installed-version contract for external APIs when needed; names, signatures, and `await` alone are insufficient.
+   Separate observed behavior, required behavior, and external consequence. Establish the applicable product, authorization, or provider contract before treating a difference as a defect: backend support need not be a UI requirement, and a request-controlled option need not violate authoritative policy. Local payload/state changes do not alone prove resulting provider state. If the violated requirement or claimed consequence depends on missing evidence, report that gap and limit the finding, severity, and blocking disposition to what is proved. A caveat below an unqualified finding does not correct an unsupported headline.
+2. Read the actual callee and outcome-transforming wrappers, including unchanged dependencies, catches, and cleanup. Use the reviewed-version contract for external APIs when needed; names, signatures, and `await` alone are insufficient.
 3. Enumerate reachable success, benign no-op, rejection/throw, fulfilled failure value, sentinel/null/zero result, partial batch outcome, and indeterminate completion after timeout. Use the actual discriminator; an object can be truthy while representing failure.
 4. Follow each material outcome through the caller. Prove it is checked, forwarded into a compatible contract, or intentionally tolerated. A catch sees rejection/throw, not a fulfilled failure object. Logging alone neither recovers nor propagates failure.
 5. Trace subsequent writes, events, success responses, queue acknowledgments, cache state, and checkpoints. Inspect already-completed effects and transaction participation; identify what a retry or concurrent invocation would repeat. Atomicity prevents partial commit; idempotency prevents duplicate effects on retry. Establish each protection that the path requires; neither substitutes for the other or automatically rolls back an external effect.
 6. Check counterevidence: documented idempotent absence, genuinely optional work, a verified adapter/error boundary, or supported recovery. Establish that the promised outcome remains truthful. Comments and neighboring style express intent but do not prove it.
+   A requested substep can be explicitly best effort while success promises only the primary effect. Adjudicate that contract using the caller, implementation, tests and consumer; do not redefine success as completion of every requested field. Dropping optional work is not false completion unless a required outcome or failure-reporting contract is violated. A locally proved omission plus an unknown remote consequence does not establish that missing requirement.
 7. Report the changed call site, producer contract, plausible failure trigger, lost/incorrect handling, and concrete consequence. Separate a confirmed defect from uncertainty about how to fix it. Do not promote “if this unavailable helper rejects” into a confirmed finding merely because a catch logs and continues or a comment describes stale state. Establish the producer's failure channel and the consumer/recovery behavior needed for the claimed consequence; otherwise record that path as incomplete. A separate proven defect can coexist with this coverage gap.
 
 Stop when the contract and handling boundary are established. Follow further wrappers only while outcomes or effects remain unresolved. Missing code, truncated reads, or an unknown critical dependency contract are coverage limitations, not proof of a defect or of safety. Do not demand a whole-repository call graph.
 
-For example, a helper that catches a provider error and returns `{ok:false}` fulfills its promise. A caller that ignores it after writing active state can still report success; adding an outer catch does not help. Making the helper throw globally or merely returning failure after committed writes may cause unsafe retries. Inspect other callers and ordering before proposing a correction.
+For example, `{ok:false}` fulfills a promise: an outer catch cannot catch it. Ignoring it after writing active state can report false success; globally throwing or returning failure after committed writes may cause unsafe retries. Check ordering and other callers first. Conversely, optional analytics can fail without invalidating a core write; documented already-absent deletion can succeed despite `deleted:false`; documented `Promise<void>` success needs no invented result check.
 
-Conversely, optional analytics failure may be logged after a successful core write without invalidating that write. An exact documented already-absent result may be successful deletion; `deleted:false` does not necessarily mean failure. A documented `Promise<void>` success needs no invented result-object validation.
-
-Check that failures are not swallowed silently and do not return misleading success states. Ensure logging exists where failures would otherwise be invisible. Logging should include useful context such as operation, entity identifier, external provider, request ID, job ID, and the error object. Do not log secrets, tokens, credentials, private payloads, or unnecessary PII.
+Check failure visibility: logger serialization/level, stable error codes, operation/entity/provider/request/job correlation and proven alert/audit/recovery contracts. Redact secrets, private payloads and unnecessary personal data, including raw provider messages. Records rolled back with business writes may not support recovery. Duplicate paging can be defective; separate correlated audit/operational records can be correct. Do not require one record per failure or universal sibling-log parity.
 
 Check partial failure behavior:
 
@@ -107,60 +73,45 @@ Check partial failure behavior:
 
 Apply the actual library semantics: native `fetch` can fulfill on HTTP errors; a 2xx body or SDK batch can still contain application failures; `allSettled` can contain rejected entries and fulfilled failure values. Check affected-row counts when a mutation is required, detached promises/async callbacks before completion, transaction callbacks that convert errors to normal returns, cleanup that masks the primary outcome, and timeout races that leave mutations running. Retry safety requires evidence of idempotency or reconciliation when the original outcome is unknown.
 
-A finding must state the missing failure mode, supporting contract and consequence, and fix readiness under the current validation/authorization constraints. Do not inflate severity solely because a return value is ignored.
+Resolve framework/runtime wrappers and rejection policy when detached failures depend on them; use `providers-and-timing.md`. Detachment alone proves neither termination nor safe optional work. Ignored results alone do not establish severity.
 
 ### Review Completion
 
-Before a clean recommendation, complete the material operation-outcome traces and reconcile confirmed findings. A confirmed blocking defect remains reportable when its fix is deferred; an unresolved material contract requires a limited/incomplete conclusion. Distinguish these from unrun unrelated tests, which do not automatically block an inspection-based review. No finding in inspected scope is not proof of correctness, and green checks or agent agreement do not replace missing evidence.
+Before a clean recommendation, complete material traces and reconcile findings. Deferred fixes do not erase blocking defects; unresolved material contracts require a limited/incomplete conclusion. Unrun unrelated tests need not block inspection-based review. No findings, green checks and agent agreement do not replace missing evidence.
 
 ## Gate 4: Cross-Repo Contract Drift And Existing-Code Inconsistency
 
-Build the producer-consumer view within repositories and across all supplied PRs. Include local caller–callee success/failure contracts: changing returned failures to throws (or the reverse) can break consumers even when names and signatures stay the same. Inspect affected consumers and distinguish new regressions/newly exposed defects from unrelated pre-existing issues.
+Trace affected producers/consumers across supplied PRs: failure values versus throws, shapes, optionality/nullability, enums, pagination/sorting, errors, date/number serialization and routes. Check environment/flag defaults, migration/rollout order, mixed versions, rollback, workers and CI/deploy configuration. Separate regressions/newly exposed defects from unrelated pre-existing issues.
 
-Check package contracts:
+Use `artifacts-and-packages.md` for package/export/generated changes and `database-schema.md` for schema/model compatibility. Application expectations, consumer pins, migration lineage and applied schema are separate evidence; source/pins alone do not establish deployment.
 
-- `package.json`;
-- lockfiles;
-- workspace/file/link/latest versions;
-- package exports maps;
-- peer deps;
-- TypeScript path aliases;
-- generated declaration files;
-- shared model packages.
-
-Check API and data contracts:
-
-- request/response shapes;
-- required/optional field changes;
-- nullable changes;
-- enum additions/removals;
-- pagination and sorting;
-- error formats;
-- date/number serialization;
-- URL/callback/webhook routes;
-- generated clients and source schemas.
-
-Check operational contracts:
-
-- env vars;
-- feature flags and defaults;
-- migration order;
-- rollback safety;
-- mixed old/new deployment behavior;
-- backend-before-frontend or frontend-before-backend deploy assumptions;
-- workers, cron, queues, background jobs, and webhook consumers;
-- CI/deploy config.
-
-Compare new code to existing patterns in the target branch and sibling repos. Report inconsistency when it changes behavior, error shape, logging style, validation, naming, release order, or deployment assumptions in a risky way.
+Cite convention source and consequence: trusted policy, nearby pattern, helper/constant, registration, validation, error/log contract or release order. Siblings/frequency do not prove correctness. Use `structure.md` for responsibility growth or copied policy; require actual drift or an explicit convention violation.
 
 ### Multiline Braced Control Flow
 
 For changed JavaScript/TypeScript control-flow bodies, require braces with the body on separate lines. Cover `if/else`, `for`/`for...of`/`for...in`, `while`/`do...while`, `switch`, and `try/catch/finally`; existing braces alone do not make a one-line body acceptable. Keep switch case statements on separate lines; do not require a new lexical block around each case unless needed. Apply this to statement-bodied callbacks/functions as well, without converting concise expression arrows or ternary expressions merely for this rule.
 
 ```js
-if (rows.some((row) => !row.zoom_uuid || String(row.zoom_meeting_id) !== zoomId)) {
+if (rows.some((row) => !row.external_id || String(row.group_id) !== groupId)) {
   return null;
 }
 ```
 
 Report a violation in changed code as a style/convention finding, normally low priority; do not inflate it into a runtime defect or treat it as a material failure-contract gap. Fix only when edits are authorized and brace placement preserves the existing control flow, including dangling-else ownership and loop scope. Do not reformat unrelated existing code. Explicit user/repository exceptions take precedence.
+
+Exact-head lint supplies evidence only if it enforces this complete multiline rule; ordinary brace-presence checks alone do not.
+
+## Gate 5: Security And Trust Boundaries
+
+Trace changed capabilities from actor through effective entry/middleware, identity, resource/tenant and guard to sensitive effect, including new effects behind unchanged routes. Inspect untrusted SQL/HTML/URL/path/model sinks, secrets and environment scope; load `security.md` for changed boundaries/privilege. Public endpoints can be intentional. Harmless mode-only changes are not access flaws; CI executable-bit changes remain reviewable. Prove reachability, failed control and consequence.
+
+## Findings And Severity
+
+Use `[P1] repo:path:line — concrete problem`, then trigger, consequence, evidence and smallest safe correction. Deduplicate root causes. Separate priority, confidence, blocking disposition and fix readiness; evidence gaps are not P-level defects.
+
+- P0: immediate severe incident risk, broadly exposed or reliably unavoidable, requiring urgent action.
+- P1: serious security/data/money/availability or core-function failure under a credible scenario; ordinarily blocks readiness.
+- P2: actionable bounded correctness/operational failure or material maintenance cost; readiness depends on impact and release policy.
+- P3: convention or minor maintainability issue; normally non-blocking.
+
+Keep clean summaries scoped to material investigated risks. Inline comments require verified current diff anchors; otherwise use the summary. A valid finding can still need a decision, authority or validation before correction.

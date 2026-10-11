@@ -2,4 +2,6 @@
 .venv/
 __pycache__/
 *.pyc
-!tests/error-handling-review-cases.md
+!tests/*-review-cases.md
+!plugins/*/skills/*/references/providers-and-timing.md
+.private-markers

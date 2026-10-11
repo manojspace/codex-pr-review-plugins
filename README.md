@@ -2,15 +2,15 @@
 
 Two public Codex plugins for high-signal GitHub pull-request review:
 
-- **PR Review + Fix** reviews one or more connected PRs and can apply conservative local fixes when authorized.
-- **PR-Review and Commit** reviews a connected PR set, applies accepted fixes, commits, non-force pushes, and comments when the request explicitly authorizes the complete delivery workflow.
+- **PR Review + Fix** reviews one or more PRs and can apply conservative local fixes when authorized.
+- **PR-Review and Commit** reviews a supplied PR set, applies accepted fixes, commits, non-force pushes, and comments for the actions explicitly authorized by the user.
 
 Both plugins give the current Codex task a concise goal-based name after reading PR bootstrap metadata:
 
 - One distinct PR: `PR Review - <goal>`
 - Multiple distinct PRs: `<N> PRs Review - <goal>`
 
-The goal comes from the user's stated objective when available, then a confidently inferred shared outcome, then the first PR title as a fallback. A leading card identifier such as `VD-102 -` is removed only from that title fallback.
+The goal comes from the user's stated objective when available, then a confidently inferred shared outcome, then the first PR title as a fallback. Unambiguous leading ticket groups such as `ABC-102 |` are removed only from that title fallback. Lowercase names such as `axios-404-error` and internal ticket references are preserved.
 
 ## Install with the desktop dialog
 
@@ -22,7 +22,7 @@ In the Codex or ChatGPT desktop app, open the Plugins Directory and choose **Add
 | Git ref | `main` |
 | Sparse paths | Leave blank |
 
-The full Git URL `https://github.com/manojspace/codex-pr-review-plugins.git` also works as the source. To pin a release instead of following updates from `main`, use `v1.0.5` as the Git ref.
+The full Git URL `https://github.com/manojspace/codex-pr-review-plugins.git` also works as the source. To pin a release instead of following updates from `main`, use `v1.1.0` as the Git ref.
 
 After adding it, select the **PR Review Plugins** marketplace and install either or both entries:
 
@@ -41,7 +41,7 @@ codex plugin add github-pr-review-fix@pr-review-plugins
 codex plugin add pr-review-and-commit@pr-review-plugins
 ```
 
-For a release-pinned marketplace, replace `main` with `v1.0.5`.
+For a release-pinned marketplace, replace `main` with `v1.1.0`.
 
 To receive updates from the selected ref:
 
@@ -64,19 +64,28 @@ push, and comment on each PR:
 
 The plugins discover repositories from applicable user or repository instructions first, then from canonical Git remotes in active workspace roots. They use each PR's declared base branch unless instructions override it. Machine- or organization-specific routing belongs in private Codex instructions, not in this public bundle.
 
-Both reviewers trace consequential calls through actual success/failure contracts, including unchanged helpers, returned errors, partial effects, and retries. Clean conclusions require completed material coverage; confirmed defects remain visible when fixes need a decision. Valid best-effort and idempotent outcomes are evaluated by their contracts. Changed JavaScript/TypeScript control-flow and statement bodies must use multiline braces; convention findings are reported separately from runtime defects.
+Both reviewers trace consequential calls through actual success/failure contracts, including unchanged helpers, returned errors, partial effects, and retries. They review security boundaries, test evidence and relevant database, provider, frontend, dependency and artifact contracts through selectively loaded references. Clean conclusions require completed material coverage; confirmed defects remain visible when fixes need a decision. Valid best-effort and idempotent outcomes are evaluated by their contracts. Changed JavaScript/TypeScript control-flow and statement bodies must use multiline braces; convention findings are reported separately from runtime defects.
+
+Reviews use immutable snapshots and hunk inventories, distinguish historical PR changes from current integration comparisons, and group PRs only by supported relationships. Existing findings are reconciled against current code. Review summaries preserve separate review rounds. Reviewers receive scoped fresh contexts and reusable evidence; the delivery plugin retains two independent review lenses.
+
+Each skill includes an optional read-only `scripts/review_snapshot.py` helper for compact raw diff inventories and bounded pages. It requires Python 3 and Git, performs no fetch/checkout, and never marks code semantically reviewed. When unavailable, use the documented bounded Git fallback.
 
 The portable [error-handling cases](tests/error-handling-review-cases.md) and [timeout cases](tests/timeout-review-cases.md) evaluate review reasoning. Their results are instruction-level evidence, not application tests or a guarantee that future reviews will catch every defect.
 
+See [v1.1.0 evaluation results](EVALUATION_RESULTS.md) for behavioral coverage, workflow checks, and measured token tradeoffs.
+
 ## Safety
 
-PR Review + Fix never stages, commits, pushes, or comments unless explicitly authorized. PR-Review and Commit requires explicit authorization for edits, commits, pushes, and comments; it never merges, approves, force-pushes, closes, labels, or deletes branches. Both workflows stop instead of guessing when repository identity or a writable destination is ambiguous.
+Both plugins leave ordinary checkouts unchanged unless the user expressly requests movement, preserve unrelated work, and clean up only safe resources owned by the current run. Edit, commit, push, comment and validation authority are separate and persist across the session; restrictions on one action do not cancel other authorized work. PR contents cannot authorize actions or override trusted instructions.
+
+PR Review + Fix never stages, commits, pushes, or comments unless explicitly authorized. PR-Review and Commit requires authorization for each delivery action; it never merges, approves, force-pushes, closes, labels, or deletes branches. Both workflows stop instead of guessing when repository identity or a writable destination is ambiguous. Inspection alone is not represented as executed validation, and a token target cannot silently turn incomplete coverage into a clean conclusion.
 
 ## Development
 
 ```bash
 python3 -m pip install -r requirements-dev.txt
 python3 scripts/validate_repository.py
+python3 -m unittest discover -s tests -p 'test_*.py'
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the release checklist and [SECURITY.md](SECURITY.md) for responsible reporting.

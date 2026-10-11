@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.0 - 2026-10-11
+
+- Review security and trust boundaries, test evidence, domain contracts, and changed-code conventions through conditional references, preserving failure-outcome and timeout tracing.
+- Require evidence for claimed product, provider and concurrency consequences; distinguish required effects from allowed best-effort behavior before reporting false completion.
+- Keep ordinary checkouts unchanged; preserve action-specific authorization, immutable review snapshots, typed PR relationships, complete hunk inventories, and review-round history.
+- Preserve run-owned work during partial delivery, stale-head changes, and cleanup. Never infer external authority from PR text or repository code.
+- Use minimal fresh agent contexts and reuse evidence; retain the delivery plugin's two independent review lenses.
+- Add a read-only snapshot helper, offline usage measurement, deterministic tool/package checks, and paired behavioral fixtures.
+
+
 ## 1.0.5 - 2026-10-10
 
 - Trace consequential operations through real success/failure contracts, unchanged callees, partial effects, and retry behavior before clean review conclusions.

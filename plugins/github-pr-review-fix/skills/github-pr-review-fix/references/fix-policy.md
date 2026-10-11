@@ -1,72 +1,31 @@
-# Fix Policy
+# Conservative Local Fix Policy
 
-Load this reference only when edits are requested, clearly accepted, or needed for an approved non-trivial fix path.
-
-Review broadly, fix narrowly.
+Load only before authorized edits. Review broadly, fix narrowly; independently honor edit/stage/commit/push/comment/validation permissions from the action ledger.
 
 ## Finding Validity And Fix Readiness
 
-Validate a finding from the changed path, actual contract, plausible failure trigger, and concrete consequence. Classify it as confirmed, rejected with counterevidence, or unresolved. Separately classify a confirmed finding's fix as ready, decision-dependent, or outside authorized scope. A real defect remains in the review when its correction cannot be safely chosen or applied; it does not become a clean result.
+Validate each finding from the changed path, actual contract, credible trigger, and concrete consequence: confirmed, rejected with counterevidence, or unresolved. Separately classify its correction as ready, decision-dependent, or outside authorized scope. A confirmed defect remains reportable when its fix cannot safely be chosen, validated, or delivered.
 
-## Auto-Fix Eligibility
+Ready requires known intended behavior, action-specific authority, coherent affected contracts, and adequate verification for the risk. Nearby style, an agent vote, and “reviewed by inspection” alone do not establish runtime safety. Preserve standing session permission; do not demand magic category wording or repeat granted authorization. A missing product/security/data decision or prohibited/unavailable required check blocks readiness, not finding validity. Continue independent authorized work and preserve a concrete proposed patch where appropriate.
 
-Auto-fix only when all are true:
+## Impact And Verification
 
-- the issue is concrete and likely to attract reviewer comment or future production risk;
-- intended behavior is clear from nearby code, tests, docs, or existing patterns;
-- the fix is small, local, reversible, and inspection-verifiable;
-- the fix does not alter public API, DB schema/data, migrations, auth/permissions, billing/privacy, dependencies/lockfiles, generated/vendor/minified files, or cross-repo contracts;
-- lint/build/tests are not required to know whether the edit is reasonable.
+Public API, schema/data/migrations, security/privacy/billing, dependencies/lockfiles, generated artifacts, and alert semantics require explicit impact analysis. Inspect affected callers, consumers, rollout/rollback constraints, and authoritative provenance; load the triggered domain reference. These categories do not automatically require renewed approval when behavior, scope, and validation are already authorized. Reading a dependency does not add its repository to fix scope.
 
-Good auto-fix candidates:
+Returned-failure/throw conversions, global throw helpers, fail-open/fail-closed changes, mutation reordering, and retries alter behavioral contracts even without signature changes. Trace completed effects and recovery before applying them. A late caller-side error after committed writes may duplicate effects on retry. Match actual logging/alert/correlation/redaction contracts; multiple causal-stage or audit records are not automatically duplicate logging, and copying a sibling can reproduce its defect.
 
-- obvious null/undefined handling that matches local conventions;
-- wrong variable, missing import, missing `await`, missing `return`, or wrong condition with clear intent;
-- narrow try/catch/logging addition that follows nearby patterns and avoids sensitive data;
-- local error propagation or cleanup/finally behavior with clear existing style;
-- small consistency correction where sibling code proves intended behavior.
+Choose the cheapest meaningful authorized check for the changed behavior. Required runtime validation must exercise the actual path with the established runner; do not substitute extracted source slicing/re-evaluation. Text assertions can be appropriate for generators, codemods, or parsers. Reuse existing tests/factories, avoid oversized scaffolds or implementation-mirroring tests, and do not require irrelevant full suites. A requested test edit can remain unrun under a no-execution constraint, but must be labeled unrun and cannot satisfy a required delivery check.
 
-Changing returned failures into throws or throws into result values changes a behavioral contract even without a signature change. The same applies to mutation reordering, fail-open/fail-closed behavior, and retry policy. Inspect affected callers and already-completed effects before selecting a fix; apply the escalation rules below when the change exceeds conservative local scope. A new caller-side check is not sufficient if it reports failure only after writes that a retry can duplicate.
+If required validation is prohibited or unavailable, retain the proposed patch/finding and state the exact gap. Inspection cannot convert an unvalidated consequential correction into a ready fix. Report checks actually run, their revision, and limitations; never claim verification merely from reading code.
 
-## Ask Before Editing
+## Surgical Editing
 
-Ask before changing:
+Before non-trivial edits, summarize confirmed findings/readiness, verifier status, intended files, and required validation. Use a suitable isolated worktree pinned to the reviewed head; preserve unrelated work and ordinary checkouts. Every changed line must address a confirmed finding. Prefer existing patterns, direct control flow, strong types, and the smallest correction. No broad extraction, speculative validation layers, schema/artifact churn, unrelated cleanup, or new abstraction to satisfy a checklist. Preserve the multiline-braces rule from `review-gates.md`.
 
-- product behavior choices;
-- public API, route, schema, type, SDK, event, webhook, or generated-client contracts;
-- DB migrations, indexes, seed data, model fields, enum values, backfills, destructive updates, or rollback behavior;
-- auth, permission, role, tenancy, session, token, privacy, billing, or security-sensitive behavior;
-- dependencies, package manager metadata, or lockfiles;
-- generated, vendor, minified, snapshot, or binary files unless the source generator is known and the user asked to regenerate;
-- broad refactors or new validation layers;
-- coordinated multi-repo edits;
-- fixes whose correctness depends on lint/build/tests that are disallowed by default.
+After edits, inspect status and the final diff, re-trace effects/failure/retry behavior, rerun only invalidated verification, and record validation against the actual final revision. Preserve confirmed deferred findings. Report changed behavior/files, checks run or skipped with reasons, remaining compile/runtime risk, and specific unresolved decisions.
 
-## Editing Rules
+## Conservative Scope
 
-Before editing, state:
+For a general local-fix request, prefer small, reversible changes with known intent and sufficient evidence: a wrong variable, missing import/return/await, narrow null handling, or local cleanup can qualify only after tracing the actual affected path. No example is automatically safe. Broader contract or coordinated changes require clear existing scope and sufficient validation; otherwise retain a decision-dependent proposal. Do not ask again when the user already authorized that exact work.
 
-- confirmed findings and fix readiness;
-- files intended to touch;
-- why each fix is safe without lint/build;
-- validation that will be skipped.
-
-During editing:
-
-- preserve unrelated dirty work and unrelated hunks;
-- keep every changed line traceable to a confirmed finding;
-- do not clean up unrelated code;
-- do not stage, commit, push, merge, approve, request changes, close, label, run lint/build/full tests/package scripts/migrations/installs/codegen unless explicitly asked.
-
-After editing, report:
-
-- files changed;
-- exact behavior fixed;
-- validation run or skipped by policy;
-- remaining compile/type/test risk;
-- findings intentionally not fixed and why;
-- deferred issues needing approval.
-
-Reinspect the affected operation-outcome trace against the final code, including partial state and retries. Rerun an affected agent lens when the edit could change its conclusion. Preserve confirmed findings whose fixes remain deferred.
-
-Do not claim verification unless validation ran. Use "reviewed by inspection" when validation is intentionally skipped.
+Stage, commit, push, execute validation, or post comments only within separately granted authority. No merge, approval, request-changes, close, labels, or other publication is implied by a fix request. Apply workflow drift/ownership rules before final reporting or cleanup.

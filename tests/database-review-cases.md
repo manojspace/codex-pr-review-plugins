@@ -184,6 +184,42 @@ The PR adds a preliminary availability lookup; two concurrent requests for overl
 
 The PR adds a preliminary availability lookup before scheduling a resource. Two concurrent overlapping requests both read 'available'. Complete supplied implementations show captureReservationRequest only writes a request record and Reservation.create inserts without rechecking or acquiring a resource lock; all model hooks are supplied and add no enforcement. The PostgreSQL 16.4 target schema has a unique reservation ID but no interval-exclusion constraint, and no other final reservation layer exists. A controlled trace commits two active overlapping reservations for the same resource and both endpoints return success. The application dispatches work from these committed rows even without a provider call; its explicit contract permits at most one active reservation per resource at any instant. Provider rejection/admission semantics are not supplied.
 
+### D27
+
+A scheduled worker selects pending rows ORDER BY id ASC LIMIT 3 with no cursor. The only pending rows have IDs 1 through 5. IDs 1 through 3 have no SMS destination; IDs 4 and 5 have valid destinations. A new early continue skips rows without a destination without changing status or any query predicate. Successful sends mark rows done. Each scheduled run makes exactly one selection; there are no other writers or retry scans. The contract requires eventual delivery for valid pending rows. Two consecutive runs both select IDs 1, 2 and 3.
+
+### D27C
+
+A scheduled SMS-only worker selects pending rows with a valid SMS destination ORDER BY id ASC LIMIT 3. The only pending rows have IDs 1 through 5; IDs 1 through 3 lack destinations, while 4 and 5 have valid destinations. The database applies destination eligibility before LIMIT. The first run selects 4 and 5 and marks them done after successful sends; the next run selects none. Trusted policy permits silent exclusion of rows without an SMS destination; no other channel uses this query.
+
+### D28
+
+A drain worker selects pending rows ORDER BY id ASC LIMIT 2 OFFSET offset, initially offset=0, and increments offset by 2 after each batch. IDs 1 through 4 are initially pending. Successful processing changes each selected row to done, removing it from the next selection. There are no concurrent writers. After processing 1 and 2, the next query uses OFFSET 2 against remaining pending rows 3 and 4 and returns none; the worker declares the drain complete. The contract requires processing all pending rows in this run.
+
+### D28C
+
+A drain worker repeatedly selects the first pending rows ORDER BY id ASC LIMIT 2 without OFFSET. IDs 1 through 4 are initially pending and no concurrent writers exist. Every selected row succeeds and becomes done before the next query. The supplied selections are [1,2], [3,4], then empty; only then does the worker declare the drain complete. The contract requires processing all pending rows in this run.
+
+### D29
+
+A worker pages an immutable snapshot with ORDER BY createdAt ASC, id ASC LIMIT 2 but persists only the last createdAt. Its next page uses createdAt > savedCreatedAt. Snapshot rows 1, 2 and 3 share timestamp T; row 4 has timestamp T+1. After page [1,2], the worker stores T and next selects only row 4. It declares the snapshot fully processed. Each row must be processed; no other scan exists.
+
+### D29C
+
+A worker pages an immutable snapshot with ORDER BY createdAt ASC, id ASC LIMIT 2. It persists the last (createdAt,id) pair and selects createdAt > savedTime OR (createdAt = savedTime AND id > savedId). IDs are unique and both cursor fields are immutable and non-null. Rows 1, 2 and 3 share T; row 4 has T+1. Supplied pages are [1,2], [3,4], then empty, with every row processed successfully before its checkpoint advances.
+
+### D30
+
+A resumable worker selects IDs greater than its durable checkpoint, initially 0, in ascending order. It processes batch [1,2,3]: 1 succeeds, 2 fails before any side effect, and 3 succeeds. The catch logs the failure for 2, then the worker durably checkpoints 3. On restart it selects only IDs greater than 3. Logs are not consumed for retries, and no failed-work table or other recovery scan exists. Trusted contract requires every record to reach success or an explicit durable terminal failure; a log alone does not qualify.
+
+### D30C
+
+A resumable worker processes [1,2,3]; 2 fails before any side effect while 1 and 3 succeed. Before advancing its checkpoint to 3, it atomically commits a durable retry entry for 2 with that checkpoint. If the transaction fails, neither change commits. A separately scheduled retry worker consumes the entry, persists bounded attempts and a monitored terminal failure if exhausted; the supplied restart trace retries 2 successfully. Processing is idempotent by record ID. Trusted contract permits checkpoint advancement once failed records are durably owned by this retry path.
+
+### D31
+
+A shared query selects pending notices and passes each selected notice independently to an SMS branch and an email branch. Trusted contract says each channel uses its own valid destination and a missing SMS destination must not prevent email. The PR adds smsDestination IS NOT NULL to the shared query. Notice 7 has no SMS destination and a valid email destination; both channels previously received the notice, SMS skipped it, and email sent it. No alternate email query exists. The new shared query omits notice 7 entirely.
+
 ## Expected Assessments (Withhold During Review)
 
 | Case | Expected assessment |
@@ -233,3 +269,12 @@ The PR adds a preliminary availability lookup before scheduling a resource. Two 
 | D26 | Evidence gap: concurrent preliminary reads establish an advisory-check race, not duplicate committed reservations. Obtain the intervening helper, hooks, final reservation/constraint and transaction contracts before confirming a functional concurrency defect. Do not attach a confirmed severity to a conditional committed-overlap or provider consequence. |
 | D26C | No functional overlap finding on the supplied path. The final atomic reservation serializes writers, rechecks after locking and rolls back conflict state; preliminary availability is advisory. Do not require locking that earlier read or invent a provider race. |
 | D26H | Confirm the demonstrated committed-overlap defect under the explicit single-reservation contract. Use atomic final enforcement, such as a resource lock and post-lock recheck in one transaction or an appropriate database constraint, and surface conflicts without reporting success or leaving conflicting active reservations. Scope impact to the proved local double reservation; do not claim provider rejection, privilege retention or a provider-specific limit. |
+| D27 | Confirm starvation beyond the batch limit: unchanged skipped rows occupy all three slots on every run, so 4 and 5 never reach processing. Correct selection/progress while preserving applicable exclusion/reporting contracts; test more than LIMIT and repeated runs. Do not claim the early continue alone ensures progress. |
+| D27C | No starvation or missing-warning finding: eligible filtering occurs before LIMIT and silent exclusion is authorized for this SMS-only path. No cursor or status mutation is required on these facts. |
+| D28 | Confirm mutation of query membership makes OFFSET skip remaining rows 3 and 4 and falsely complete the drain. Repeatedly select the first remaining batch or use a stable cursor with suitable failure ownership; do not recommend increasing OFFSET. |
+| D28C | No OFFSET omission or progress finding: successful processing removes each first batch before reselection. Do not require OFFSET merely because results are batched. |
+| D29 | Confirm timestamp-only cursor loses row 3 at a tie boundary despite deterministic ordering. Persist and compare the full ordered (createdAt,id) pair; changing only ORDER BY is insufficient. |
+| D29C | No tie-boundary omission on the supplied immutable snapshot and composite cursor. Do not invent concurrent timestamp mutation. |
+| D30 | Confirm record 2 becomes unreachable after checkpoint 3; logging does not supply recovery ownership. Keep progress before unresolved work or atomically assign durable retry ownership before advancing, preserving idempotency. |
+| D30C | No skipped-failure finding: durable retry ownership commits atomically with checkpoint advancement and survives restart. Do not demand stopping all later work when the supplied contract permits independent recovery. |
+| D31 | Confirm SMS-specific filtering in a shared selector suppresses otherwise valid email delivery. Preserve shared candidates and apply channel eligibility independently, or use separately scoped channel queries; an SMS guard alone does not justify shared exclusion. |

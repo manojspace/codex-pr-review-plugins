@@ -198,7 +198,7 @@ The PR adds a member-selection screen whose Save button is disabled when selecte
 | C18C | No unsafe retry-copy finding. |
 | C19 | Confirm client-clock authorization bypass at the backend boundary. Enforce subscription/time on the server; client countdown remains presentation only. |
 | C19C | No client-clock authorization finding. |
-| C20 | Confirm inaccessible modal interaction. Use the existing accessible dialog primitive preserving those behaviors; no unrelated visual redesign. |
+| C20 | Confirm inaccessible modal interaction. Restore the required accessibility behaviors, reusing an existing accessible dialog primitive if available; no unrelated visual redesign. |
 | C20C | No modal accessibility finding on supplied evidence. |
 | C21 | Do not confirm a structural/runtime defect or mandate extraction/lazy loading from size alone. State which responsibility/convention evidence would justify a recommendation. |
 | C22 | No confirmed product defect from backend support alone. Identify the missing UI requirement/empty-state contract as a question if material; do not prescribe enabling empty submissions merely because the endpoint supports them. |

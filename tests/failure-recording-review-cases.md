@@ -96,6 +96,22 @@ A new catch attaches operationId and rethrows without logging; the enclosing bou
 
 A new catch logs { error } at warn. Logger serializer behavior, monitoring rules, lower-level recording and caller handling are unavailable. One neighboring catch uses error.message; another uses error. No produced log record is supplied.
 
+### R19
+
+A notice worker previously selected every pending notice and emitted one warning with noticeId and reason for each missing destination. Trusted policy still requires those warnings so operators can repair individual notices. The PR filters out missing destinations in SQL before the loop; the warning branch remains inside the loop. It logs selectedRows.length as excludedCount. Of five pending notices, two have valid destinations and three lack them; the query returns only the two valid rows, both are sent, no warnings occur, and excludedCount is logged as 2. No other report or recorder exists.
+
+### R19C
+
+A worker selects only pending notices with valid destinations before applying its batch limit. Trusted policy explicitly permits silent exclusion of notices without destinations and requires no exclusion count or per-notice warning. The worker logs the returned row count as selectedCount. Five notices are pending, two have valid destinations, the query returns those two and logs selectedCount=2. No other delivery channel depends on this selector.
+
+### R20
+
+Trusted remediation policy requires one warning per excluded notice with noticeId and a stable exclusion reason; raw destination values are prohibited. A new pre-filter excludes three notices lacking destinations and emits only { runId, excludedCount:3, reason:'missing_destination' }. The count is verified against the same immutable candidate snapshot. There is no event linking the run to the excluded notice IDs, and operators cannot identify the individual notices from the summary. No other recorder exists.
+
+### R20C
+
+Trusted monitoring policy permits one aggregate warning per run for missing destinations and explicitly requires no entity IDs or individual remediation events. The new pre-filter counts excluded rows against the same immutable candidate snapshot used for selection and emits { runId, excludedCount:3, reason:'missing_destination' } through the required warning sink. The supplied snapshot contains exactly three such exclusions; no raw destination values are logged.
+
 ## Expected Assessments (Withhold During Review)
 
 | Case | Expected assessment |
@@ -123,3 +139,7 @@ A new catch logs { error } at warn. Logger serializer behavior, monitoring rules
 | R17 | Confirm duplicate operational paging; retain one owner/correlated record under the supplied contract, without removing an independently required audit trail. |
 | R17C | No duplicate-page finding. |
 | R18 | Evidence gap; obtain serializer/monitor/ownership contracts. Neither lost fields nor duplicate alerts are confirmed from spelling alone. |
+| R19 | Confirm the pre-filter bypasses required per-notice warnings and selectedRows.length measures selected rows, not exclusions (2 versus 3). Preserve required noticeId/reason recording for excluded candidates and measure exclusions from the actual exclusion set; renaming the selected count alone does not restore warnings. Do not move rows back into a bounded selector without checking progress. |
+| R19C | No missing-warning or count-label finding: silent exclusion is explicitly accepted and selectedCount accurately names the returned population. Do not invent an exclusion-reporting requirement. |
+| R20 | Confirm the accurate aggregate still fails required entity correlation. Record the excluded notice IDs with stable reasons through the approved warning path, without logging destinations; the count and runId cannot substitute for entity IDs under this contract. |
+| R20C | No per-entity recording finding: the accurate aggregate satisfies the supplied policy and required warning sink. Do not demand notice IDs or duplicate per-notice events. |

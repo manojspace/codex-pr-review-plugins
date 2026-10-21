@@ -1,5 +1,7 @@
 # Codex PR Review Plugins
 
+The `v1.1.1` candidate has not passed the mandatory full-matrix release gate. See [evaluation results](EVALUATION_RESULTS.md) for the passing targeted scenarios and remaining failures. Release-pin examples below describe the intended version; a stable tag is pending the release decision.
+
 Two public Codex plugins for high-signal GitHub pull-request review:
 
 - **PR Review + Fix** reviews one or more PRs and can apply conservative local fixes when authorized.
@@ -22,7 +24,7 @@ In the Codex or ChatGPT desktop app, open the Plugins Directory and choose **Add
 | Git ref | `main` |
 | Sparse paths | Leave blank |
 
-The full Git URL `https://github.com/manojspace/codex-pr-review-plugins.git` also works as the source. To pin a release instead of following updates from `main`, use `v1.1.0` as the Git ref.
+The full Git URL `https://github.com/manojspace/codex-pr-review-plugins.git` also works as the source. To pin a release instead of following updates from `main`, use `v1.1.1` as the Git ref.
 
 After adding it, select the **PR Review Plugins** marketplace and install either or both entries:
 
@@ -41,7 +43,7 @@ codex plugin add github-pr-review-fix@pr-review-plugins
 codex plugin add pr-review-and-commit@pr-review-plugins
 ```
 
-For a release-pinned marketplace, replace `main` with `v1.1.0`.
+For a release-pinned marketplace, replace `main` with `v1.1.1`.
 
 To receive updates from the selected ref:
 
@@ -72,7 +74,9 @@ Each skill includes an optional read-only `scripts/review_snapshot.py` helper fo
 
 The portable [error-handling cases](tests/error-handling-review-cases.md) and [timeout cases](tests/timeout-review-cases.md) evaluate review reasoning. Their results are instruction-level evidence, not application tests or a guarantee that future reviews will catch every defect.
 
-See [v1.1.0 evaluation results](EVALUATION_RESULTS.md) for behavioral coverage, workflow checks, and measured token tradeoffs.
+Reviews of collection processing trace eligibility and checkpoints into subsequent pages/runs. Corrective reviews verify both the original fix and preservation of material criteria, including reporting for records excluded before processing. Missing criteria limit the conclusion; intentional silent exclusions and sufficient aggregate reporting remain valid.
+
+See [evaluation results](EVALUATION_RESULTS.md) for versioned behavioral coverage, workflow checks, and limitations.
 
 ## Safety
 

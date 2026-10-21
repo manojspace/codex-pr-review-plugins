@@ -1,3 +1,69 @@
+# v1.1.1 candidate evaluation — 2026-10-21
+
+**Status: the mandatory full-matrix release gate has not passed.** The targeted collection-progress and requirement-preservation trials pass, but broader recommendation and evidence-precision failures remain. Packaging success does not make this a validated stable release. Results below describe the evaluated candidate, not a guarantee that future reviews will catch every defect.
+
+## Scope and method
+
+Both plugins were evaluated against all 323 portable cases (307 existing and 16 new), giving 646 final-candidate assessments in four fresh reviewer contexts. Inputs were separate from expected assessments, which reviewers were prohibited from reading. Each case was treated independently within its batch; isolation was procedural, not a filesystem security boundary. Independent scorers checked the actual outputs against source contracts and controls. The oracle audit corrected P01's unsupported merge-conflict assumption, C20's assumed existing dialog primitive, and P35's requirement for an unavailable discussion URL.
+
+Task-owned session metadata identifies the reviewers as `gpt-6-astra`, reasoning effort `high`, with inherited settings. No model override was requested. These are instruction-level evaluations; they do not demonstrate execution of each hypothetical application or delivery action. Batching can permit cross-case influence. Reviewers and scorers use the same model family.
+
+## Final candidate r2
+
+| Matrix | Assessments | Causal judgments passing |
+| --- | ---: | ---: |
+| Operation outcomes | 142 | 142 |
+| UI, security and test evidence | 180 | 180 |
+| Database and failure recording | 162 | 162 |
+| PR process, titles and timeouts | 162 | 161 |
+| Total | 646 | 645 |
+
+The remaining causal failure is the delivery plugin's P01 wording: it calls a shared generated archive an integration conflict to inspect, although overlap alone establishes only potential coordination. The scorer records the wording ambiguity; it is not silently counted as a pass.
+
+Correction quality is separate from defect recognition:
+
+- C20 in both plugins assumes an existing dialog primitive. SEC05H in both refers to an approved sanitizer without establishing its availability (a safe text-rendering alternative is also offered). T02 in both assumes an exported unit or injection seam. These six prerequisite/precision misses remain.
+- Delivery SEC16 omits caller-file ownership from its proposed traversal corrections. Delivery T06 assumes a rejection matcher rather than deriving it from the intended operation contract. These two substantive recommendation failures remain.
+- Both E36 recommendations omit the oracle's explicit version/conditional-state protection when moving provider work outside a lock. These are incomplete recommendations, not observed unsafe implementations.
+- Delivery D04 and D26H leave rollout/data-state details unresolved; the bounded review advice is not an executable migration plan.
+- Four explicit priority mismatches remain: both plugins assign P2 where R01 and R07 expect P3. Additional priority variation is recorded separately from causal correctness.
+
+All 16 added portable cases have the expected causal disposition in both plugins. This does not erase the failures elsewhere in the mandatory matrix.
+
+## Staged reviews and transformed cases
+
+Six fresh review conversations (three per plugin) each saw only the current synthetic revision: an early skip that starves eligible records, an eligibility-only correction that loses required reporting, a correction preserving aggregate reporting, then new discussion/check evidence at the same head. All 24 assessments pass their semantic contracts.
+
+Six additional fresh batches (three per plugin) reviewed nine independent cases each: missing criteria, accepted silence, entity-level reporting requirements, and transformed export/workspace versions. All 54 assessments pass. The combined targeted result is **78/78 semantic passes**, including safe controls and scoped uncertainty. Six query references in one holdout batch point to line 8 instead of line 9; this citation imprecision is retained separately.
+
+The requirement document was separately linked from metadata rather than inserted into the review prompt. Tool outputs in all six staged traces contain the actual requirement text and the updated infrastructure-check evidence. Every final refresh distinguishes runner failure before tests from an application assertion failure. These trials restrict subagents to isolate one reviewer's reasoning; they are not full executions of the plugins' independence policies.
+
+## Executed validation and delivery experiment
+
+- Repository/package validation and 64 unit tests pass. The validator checks structure, shared-reference parity, versions, references, size limits and public-file content; it does not score model reasoning.
+- The 12 synthetic staged/holdout source variants pass their behavior and reverse-patch checks.
+- One real disposable delivery workflow used two fresh independent lenses and their affected-evidence rechecks. It reproduced two failures in three provided tests, changed only the worker, passed all three final tests plus six additional scenarios, created an `ai review` commit with an empty body, and non-force pushed to a local bare remote. It preserved the ordinary checkout's branch, HEAD, status and sentinel and removed only its clean owned worktree.
+- That delivery experiment ran on r1. The r2 change adds the suggested-correction paragraph; workflow, permissions, agent policy and helper code are unchanged. Its Git-mechanics evidence is retained with r1 provenance, not described as a fresh r2 workflow. No real GitHub review or production effects were exercised.
+- Codex CLI `0.163.0-alpha.11` exposes no plugin/skill validation subcommand. Host validation is unavailable; supported marketplace installation and fresh installed-skill invocation remain pending publication.
+
+## Earlier attempt and provenance
+
+The first candidate r1 received the same 646 input assessments in eight fresh contexts. Its duplicate-payment recommendation omitted duplicate remediation before uniqueness, and the independent audit retained additional advice defects. A second candidate added explicit preservation, prerequisite, helper-availability and contract-derived-assertion requirements. The complete matrix was then rerun on r2 rather than reusing r1 answers. The r2 results above show both improvement and persistent misses. Seven preliminary r1 staged assessments are retained as exploratory evidence and excluded from the r2 totals.
+
+Package digests are SHA-256 over sorted lines `<file SHA-256>  <package-relative POSIX path>\n` for every packaged file:
+
+| Artifact | SHA-256 |
+| --- | --- |
+| r2 PR Review + Fix | `f7b3327a00fc9af4e1a96433053e364b5997bcab9079db68ded478521ca73fae` |
+| r2 PR-Review and Commit | `ef87184fe4aab946dc6d7f02f129030511ae164b480b96d365f1408669c238e9` |
+| r1 PR Review + Fix | `fb7c324c1cf864d3f7d4f87225bffaaf66c5b1aa5f8e85b71f7ad4e08accf757` |
+| r1 PR-Review and Commit | `dd1efaaa3278e77a89de880b9b45cfab06c52e1b7e15f052aff9cd26af2f9aa8` |
+| Nine portable fixture files | `6ce559b157736ea687bedeef6f017ad1a48d933cc504deeaf5646809b5550f5c` |
+
+The fixture digest uses the same method with repository-relative paths. Private evaluation records retain package/fixture manifests, inputs, actual responses, scoring and trace evidence. No token, latency or efficiency improvement is claimed. The historical v1.1.0 results below are unchanged and do not establish a pass for this candidate.
+
+---
+
 # v1.1.0 evaluation results
 
 The final candidate passed the causal review and focused private-regression gates below. Priority calibration and token use have material limitations; these results are bounded observations, not a guarantee of future review accuracy.

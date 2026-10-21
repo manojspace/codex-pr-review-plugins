@@ -19,7 +19,9 @@ Fetch metadata once through connector/MCP, authenticated `gh` as fallback: canon
 - **Closed-unmerged:** review the requested pinned delta normally and state lifecycle status. Do not confuse it with merged history or recreate a deleted head.
 - **Extra comparison:** keep any user-requested comparison snapshot and delta separate from the PR delta, identifying which supports each finding. `git diff A B` compares two trees; `git diff A...B` compares merge-base to B. Record the chosen start object and rationale instead of calling them interchangeable.
 
-Fetch linked criteria, commits, current checks for the exact head, reviews, timeline/inline comments, and resolved/outdated threads once when material. Follow actual continuation cursors for files, reviews, threads, and each thread's comments; the first 100 records or first reply is not complete. Verify description claims against the diff. Report unavailable criteria only where their absence affects the conclusion.
+Fetch linked criteria, commits, current checks for the exact head, reviews, timeline/inline comments, and resolved/outdated threads once when material. Follow actual continuation cursors for files, reviews, threads, and each thread's comments; the first 100 records or first reply is not complete. Verify description claims against the diff.
+
+A criterion is material when the patch implements, removes, bypasses or trades off its behavior, including visibility or recovery. Retrieve that criterion before accepting the tradeoff. Keep a compact internal source/disposition record: satisfied, changed with authority, violated, or unverified. A PR description alone does not waive an original requirement. If the source is unavailable, state the specific conclusion it prevents; do not invent a violation. Keep this evidence internal unless it affects the findings or readiness.
 
 ## Inventory And Hunk Coverage
 
@@ -41,7 +43,9 @@ Search siblings only to resolve a changed interface/package or explicit missing 
 
 Reuse previous coverage only with verified snapshot, scope, object/contract hashes, and review-policy revision. Account for base movement in old/new deltas; reopen changed contracts/configuration, transitive dependent traces, and live findings. Resolved/outdated thread flags and a previous clean comment are not proof: inspect current code and later replies. Without trustworthy prior provenance, do a full affected review.
 
-Recheck head, base, PR state, and destination before final output. Changes invalidate affected evidence rather than all unrelated work. Permit one automatic review-only refresh; continued drift returns the exact last-reviewed snapshot and gaps. Required final-revision verification is never waived because refresh or agent rerun budgets are exhausted.
+For corrective follow-ups, verify both resolution and preservation. Reopen traces when selection population, ordering, effects or reporting boundaries move, even if the original reproducer now passes. Reuse unaffected pinned evidence.
+
+Recheck head, base, PR state, destination, relevant checks and review discussions once before final output. New comments can contain material evidence without a changed head; inspect their claims independently and reconcile them with current source. Changes invalidate affected evidence rather than all unrelated work. Permit one automatic review-only refresh; continued drift returns the exact last-reviewed snapshot and gaps. Required final-revision verification is never waived because refresh or agent rerun budgets are exhausted.
 
 ## Owned Cleanup
 

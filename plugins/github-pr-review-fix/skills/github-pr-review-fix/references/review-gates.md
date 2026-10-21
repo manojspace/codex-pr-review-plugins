@@ -24,6 +24,14 @@ When timeouts, retries, polling, or other bounded work change:
 - Support deadline-exhaustion findings with source establishing a feasible delay scenario, relevant timings, or a focused reproduction. A sum of configured ceilings is a risk signal, not proof. Name the affected caller, effective budget, changed behavior, and remaining work. If evidence is insufficient, state the uncertainty and the smallest useful check rather than presenting a guaranteed failure.
 - Prefer a fix at the affected scope. Do not automatically raise global limits or weaken assertions to make a test pass.
 
+### Collection Progress Across Runs
+
+When selection, filters, ordering, limits, pagination, per-item skips, retries or completion markers change, trace `selection → item outcome → persisted eligibility/checkpoint → next page/run`. Establish which records must eventually progress and who owns skipped/failed work. A safe single invocation does not prove progress across invocations.
+
+Use a feasible population larger than the batch limit, with skipped or failed records at the selection boundary, then trace a subsequent page/run. Check unchanged eligibility, moving time windows, tied ordering keys, and membership changed by processing. A starvation/loss finding needs the selection rule, reachable outcome, state left behind, subsequent selection and concrete consequence. Check counterevidence: pre-limit eligibility filtering, a stable cursor, terminal markers or durable separate retry ownership. Do not require every bounded job to drain its backlog without a supporting contract.
+
+Recheck other consumers of shared selectors: ineligibility for one action need not disqualify a record from another. Use `database-runtime.md` for affected query semantics.
+
 ### Evidence For The Claimed Fix
 
 For reliability changes, check the claimed failure condition; healthy runs do not prove resilience. Distinguish inspection, author reports, observed CI and reproduction. Verify tested revision, runner discovery, paths/filters and real assertions: unawaited assertions, zero matching tests, mocks removing safeguards or fork CI on another tree can invalidate evidence. Identify skipped/cancelled/flaky/stale/lint-only checks. Documented manual/direct tests can supply evidence without package scripts; unexecuted source supplies intent. Use cheap relevant checks within authorization; disclose material gaps, not every unrun test as a blocker.
@@ -62,6 +70,8 @@ For example, `{ok:false}` fulfills a promise: an outer catch cannot catch it. Ig
 
 Check failure visibility: logger serialization/level, stable error codes, operation/entity/provider/request/job correlation and proven alert/audit/recovery contracts. Redact secrets, private payloads and unnecessary personal data, including raw provider messages. Records rolled back with business writes may not support recovery. Duplicate paging can be defective; separate correlated audit/operational records can be correct. Do not require one record per failure or universal sibling-log parity.
 
+When a filter, guard or moved operation bypasses a reporting boundary, identify the excluded population and trace it to a replacement signal. Counts of selected or successful records do not measure excluded records. Verify the required granularity, correlation, level and timing against the applicable alert/audit/recovery or product criterion. Aggregate reporting can suffice; entity-level events are required only by the actual contract. Accepted silent exclusions are valid. If a material criterion is unavailable, name the gap rather than inventing a logging defect or declaring the tradeoff safe.
+
 Check partial failure behavior:
 
 - step 2 fails after step 1 succeeded;
@@ -77,7 +87,7 @@ Resolve framework/runtime wrappers and rejection policy when detached failures d
 
 ### Review Completion
 
-Before a clean recommendation, complete material traces and reconcile findings. Deferred fixes do not erase blocking defects; unresolved material contracts require a limited/incomplete conclusion. Unrun unrelated tests need not block inspection-based review. No findings, green checks and agent agreement do not replace missing evidence.
+Before a clean recommendation, complete material traces and reconcile findings. Resolving the original finding does not establish overall readiness: corrective changes must preserve other material requirements. Distinguish a verified violation, a verified acceptable tradeoff and an unavailable criterion. Deferred fixes do not erase blocking defects; unresolved material contracts require a limited/incomplete conclusion. Unrun unrelated tests need not block inspection-based review. No findings, green checks and agent agreement do not replace missing evidence.
 
 ## Gate 4: Cross-Repo Contract Drift And Existing-Code Inconsistency
 
@@ -106,6 +116,8 @@ Exact-head lint supplies evidence only if it enforces this complete multiline ru
 Trace changed capabilities from actor through effective entry/middleware, identity, resource/tenant and guard to sensitive effect, including new effects behind unchanged routes. Inspect untrusted SQL/HTML/URL/path/model sinks, secrets and environment scope; load `security.md` for changed boundaries/privilege. Public endpoints can be intentional. Harmless mode-only changes are not access flaws; CI executable-bit changes remain reviewable. Prove reachability, failed control and consequence.
 
 ## Findings And Severity
+
+Apply the same contract and preservation checks to your own suggested correction. Retain required ownership/authorization and reporting controls; name necessary data or migration prerequisites, such as duplicate audit/remediation before uniqueness. Verify a proposed helper exists or qualify its availability. Derive test assertions from the intended operation contract, not the currently observed failure. If a prerequisite or intent is unknown, make the recommendation conditional rather than presenting it as ready to apply.
 
 Use `[P1] repo:path:line — concrete problem`, then trigger, consequence, evidence and smallest safe correction. Deduplicate root causes. Separate priority, confidence, blocking disposition and fix readiness; evidence gaps are not P-level defects.
 

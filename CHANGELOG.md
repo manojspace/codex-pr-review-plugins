@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.1 - 2026-10-21
+
+- Trace bounded collection progress across pages and runs, including skipped records, changing membership, cursor ties and retry ownership.
+- Verify material acceptance criteria before accepting tradeoffs; trace excluded populations to contract-appropriate reporting without requiring universal logging.
+- Re-review corrective changes for requirement preservation, and refresh relevant discussions/checks before the final conclusion even when the head is unchanged.
+- Apply those preservation checks to suggested fixes, including authorization, migration prerequisites, helper availability and contract-derived test assertions.
+- Sharpen the existing independent lenses while preserving their differing risk policies and all action-specific authorization boundaries.
+- Add paired regression cases and staged reviews for collection progress, reporting preservation and unavailable criteria.
+
 ## 1.1.0 - 2026-10-11
 
 - Review security and trust boundaries, test evidence, domain contracts, and changed-code conventions through conditional references, preserving failure-outcome and timeout tracing.

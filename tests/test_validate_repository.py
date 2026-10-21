@@ -124,15 +124,15 @@ class BundleTests(unittest.TestCase):
 
     def test_readme_pin(self):
         p = self.root / "README.md"
-        p.write_text(p.read_text().replace("`v1.1.0`", "`v0.0.0`"))
+        p.write_text(p.read_text().replace("`v1.1.1`", "`v0.0.0`"))
         with self.assertRaisesRegex(ValueError, "release pin"):
-            validator.validate_release_metadata("1.1.0")
+            validator.validate_release_metadata("1.1.1")
 
     def test_changelog_version(self):
         p = self.root / "CHANGELOG.md"
-        p.write_text(p.read_text().replace("## 1.1.0 -", "## 0.0.0 -", 1))
+        p.write_text(p.read_text().replace("## 1.1.1 -", "## 0.0.0 -", 1))
         with self.assertRaisesRegex(ValueError, "changelog version"):
-            validator.validate_release_metadata("1.1.0")
+            validator.validate_release_metadata("1.1.1")
 
     def test_optional_private_markers_are_case_insensitive(self):
         (self.root / "example.md").write_text("ORG-PRIVATE-EXAMPLE")

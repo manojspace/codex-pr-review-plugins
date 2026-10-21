@@ -19,6 +19,7 @@ Load applicable sections for changed writes, transaction/lock ownership, critica
 ## Query And Value Semantics
 
 - Trace query shape, filters, joins, pagination/order, data volume and relevant index evidence. Establish realistic N+1, full-scan, pool or memory impact before reporting performance defects.
+- For collection-progress changes, establish whether eligibility is filtered before or after ordering/limit. Processing can remove rows from the next page's population, making OFFSET skip remaining work. Check cursor tie-breaking/uniqueness, resume boundaries and ownership of skipped/failed records passed by a checkpoint. A cursor alone does not prove lossless progress; durable retries or other verified ownership can supply counterevidence. Apply the collection trace in `review-gates.md`, including other consumers of shared queries.
 - Check replica/cache read-after-write behavior when a stale read can drive an incorrect response or repeated mutation. Strong-read routing, consistency tokens or supported eventual behavior can be sufficient.
 - Where changed comparisons/serialization depend on them, verify numeric precision/range, timezone, NULL and collation semantics against the actual driver/engine contract. Do not assume JavaScript numbers preserve arbitrary database integers or money precision.
 

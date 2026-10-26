@@ -100,7 +100,7 @@ A new catch logs { error } at warn. Logger serializer behavior, monitoring rules
 
 | Case | Expected assessment |
 | --- | --- |
-| R01 | P3 recording finding: cause disappears at warn. Use the established redacted errorMessage/code fields and orderId. No save-semantics finding. |
+| R01 | Recording finding: cause disappears at warn. Use the established redacted errorMessage/code fields and orderId. No save-semantics finding. |
 | R02 | No recording or business-outcome finding; serialization is established. |
 | R03 | Confirm lost cause/code, prohibited personal data and wrong operation labeling. Use memberId, operation and the approved serializer; do not invent a caller failure. |
 | R03C | No recording finding. |
@@ -109,7 +109,7 @@ A new catch logs { error } at warn. Logger serializer behavior, monitoring rules
 | R05 | No recording parity finding; do not suggest logging the raw body. |
 | R06 | Confirm sentinel leakage and false retry advice at producer/consumer boundary. Return a stable code through the established envelope and use the supplied mapping. |
 | R06C | No actionable-copy finding. |
-| R07 | P3 producer/consumer finding: approved recovery guidance is discarded. Use the established safe message mapping; do not render arbitrary server text as HTML. |
+| R07 | Producer/consumer finding: approved recovery guidance is discarded. Use the established safe message mapping; do not render arbitrary server text as HTML. |
 | R08 | No discarded-guidance or HTML injection finding. |
 | R09 | Confirm process termination from an unowned optional rejection. Return/await the promise and catch/log according to optional-failure policy; do not retry the committed save. |
 | R10 | No unhandled-rejection finding on supplied implementation; do not demand a business rollback. |

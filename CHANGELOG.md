@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0 - 2026-10-26
+
+- Remove priority codes and severity badges from findings, comments, and summaries in both plugins; retain concrete impact, evidence, and fix readiness.
+- Interpret requests to leave review comments as inline findings submitted with Request changes and no review body or summary. Use bodyless submission; never add required-body filler.
+- Submit explicitly requested approval directly without a body; honor conditions and comment-only overrides without repeated permission questions. A separately requested summary is a separate comment.
+- Preserve current-head anchors, existing drafts, historical reviews, and duplicate prevention; skip fixed findings and empty request-changes reviews.
+- Add shared publication instructions and regression cases for review actions. See the evaluation report for actual checks and limitations.
+
 ## 1.1.0 - 2026-10-11
 
 - Review security and trust boundaries, test evidence, domain contracts, and changed-code conventions through conditional references, preserving failure-outcome and timeout tracing.

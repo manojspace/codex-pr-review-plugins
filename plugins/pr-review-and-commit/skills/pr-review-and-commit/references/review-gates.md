@@ -105,13 +105,10 @@ Exact-head lint supplies evidence only if it enforces this complete multiline ru
 
 Trace changed capabilities from actor through effective entry/middleware, identity, resource/tenant and guard to sensitive effect, including new effects behind unchanged routes. Inspect untrusted SQL/HTML/URL/path/model sinks, secrets and environment scope; load `security.md` for changed boundaries/privilege. Public endpoints can be intentional. Harmless mode-only changes are not access flaws; CI executable-bit changes remain reviewable. Prove reachability, failed control and consequence.
 
-## Findings And Severity
+## Findings And Impact
 
-Use `[P1] repo:path:line — concrete problem`, then trigger, consequence, evidence and smallest safe correction. Deduplicate root causes. Separate priority, confidence, blocking disposition and fix readiness; evidence gaps are not P-level defects.
+Use `repo:path:line — concrete problem`, then trigger, consequence, evidence and smallest safe correction. Deduplicate root causes and order findings by concrete impact. Never emit priority codes such as P0, P1, P2, P3 or bracketed variants in chat, inline comments, or requested summaries. Separate confidence, blocking disposition and fix readiness; evidence gaps are not invented defects.
 
-- P0: immediate severe incident risk, broadly exposed or reliably unavoidable, requiring urgent action.
-- P1: serious security/data/money/availability or core-function failure under a credible scenario; ordinarily blocks readiness.
-- P2: actionable bounded correctness/operational failure or material maintenance cost; readiness depends on impact and release policy.
-- P3: convention or minor maintainability issue; normally non-blocking.
+Serious security, data, money, availability or core-function failures ordinarily block readiness. Bounded correctness/operational failures depend on impact and release policy. Convention or minor maintainability issues are normally non-blocking; do not inflate them into runtime defects. Describe the actual consequence instead of assigning a severity badge.
 
-Keep clean summaries scoped to material investigated risks. Inline comments require verified current diff anchors; otherwise use the summary. A valid finding can still need a decision, authority or validation before correction.
+Keep clean conclusions scoped to material investigated risks. Inline comments require verified current diff anchors; otherwise retain the finding in chat and explain the posting gap. Summaries require an explicit request; follow `review-actions.md`. A valid finding can still need a decision, authority or validation before correction.

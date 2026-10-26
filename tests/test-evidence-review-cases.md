@@ -93,7 +93,7 @@ The new test code and package scripts are supplied, but the CI runner, discovery
 | T02 | Confirm false-positive test behavior from source slicing and skipped assertions. Import the actual exported unit or test its public interface with existing dependency seams; no speculative abstraction required. |
 | T02C | No source-slicing or vacuous assertion finding. |
 | T03 | Report missing integration evidence for middleware, without a public-route defect because supplied source establishes guard order and ownership. |
-| T03H | Confirm public unauthorized mutation despite the test pass; correct middleware order and ownership, and test through the router. Justify severity from appointment impact; no unconditional P0. |
+| T03H | Confirm public unauthorized mutation despite the test pass; correct middleware order and ownership, and test through the router. Explain concrete appointment impact without priority codes or unsupported urgency. |
 | T04 | No test-evidence finding for the supplied path. |
 | T05 | Reject unsupported verification and unvalidated brittle test delivery. Report the missing test/evidence and use an existing meaningful validation path before delivering any authorized patch; do not claim CI exercised it. |
 | T05C | No unrun-test or unsupported-validation objection to this evidence; actual delivery still obeys the package's authority/readiness checks. |

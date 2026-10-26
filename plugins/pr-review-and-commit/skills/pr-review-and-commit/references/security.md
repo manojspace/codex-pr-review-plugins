@@ -20,4 +20,4 @@ Load for changed routes, identity/authorization, privileged effects, webhooks, u
 
 When webhook verification changes, inspect the provider/version contract, exact signed bytes, guard order and secret selection. Verification after body transformation can fail or verify the wrong representation; raw-byte verification may be correct. A valid signature does not itself prove freshness or unique processing: check required timestamp tolerance, event identity and durable deduplication. Expiry alone does not prevent duplicates inside its window. Use `providers-and-timing.md` for retry/acknowledgment consequences.
 
-Report the concrete actor, reachable input, failed control and sensitive consequence, with safe redacted evidence. Do not prescribe a particular guard library or assign P0 to every access-control flaw.
+Report the concrete actor, reachable input, failed control and sensitive consequence, with safe redacted evidence. Do not prescribe a particular guard library or inflate impact merely because a flaw involves access control. Omit priority codes.

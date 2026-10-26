@@ -1,4 +1,31 @@
-# v1.1.0 evaluation results
+# Evaluation results
+
+## v1.2.0 — 2026-10-26
+
+Both plugins were evaluated against 333 input-only cases each, including 26 new review-action cases. Expected assessments were withheld from fresh-context reviewers and independently audited before scoring. Reviewers used inherited session settings; exact backend model/settings and per-run usage were not exposed, so no token, latency, or efficiency claim is made. Package, fixture, input, and output hashes are recorded in [the evaluation manifest](tests/evaluation-v1.2.0.json).
+
+| Check | Observed result |
+| --- | --- |
+| Automated tests | 64 passed |
+| Repository and skill-format validation | Passed for both packages |
+| First complete fixture matrix | 662 passed, 4 correction-quality failures across 666 assessments |
+| New review-action cases, included above | 52/52 passed |
+| Fresh isolated rechecks of the four failed assessments | 4/4 passed on the same package |
+| Additional critical-case plain/renamed-wrapper contexts | 12/12 passed |
+| Frozen v1.1.0 baseline, three critical cases per plugin | 6/6 passed |
+| Offline bodyless-review protocol model | 7/7 passed |
+
+Each plugin's first matrix had the same two correction-quality misses: C20 assumed an accessible dialog primitive already existed, and D11 omitted the duplicate audit/remediation needed before adding uniqueness. The findings themselves were supported. Fresh isolated rechecks made primitive reuse conditional and explicitly handled existing duplicates and rollout. These passes supplement the original failures; they do not erase them or establish consistent behavior in long review contexts. Across the matrix, isolated rechecks, and additional repeats, there were 678 passes and four failures in 682 candidate observations. Every required case has a passing assessment on the frozen package, but the first complete matrix was not a perfect pass.
+
+The oracle audit also corrected two unsupported expectations without changing inputs: C20 now conditions primitive reuse on verified availability; P01 treats an overlapping archive as a conflict-investigation lead, not a proven merge conflict. Earlier attempts and private raw evidence are retained separately. The two primary matrix contexts were larger than a typical targeted review; isolated rechecks are separate contexts, not a repeat of the entire matrix.
+
+E01, E02 and E18 each passed in three fresh candidate contexts per plugin, including a renamed/transparent-wrapper holdout. The small matched baseline also passed; this does not demonstrate improved causal detection over v1.1.0. Task-title, timeout, safe-control, missing-evidence, action-boundary and deferred-correction cases remain covered.
+
+The seven offline protocol checks cover bodyless pending-review creation/submission, bodyless approval, preservation of an existing draft, rejected submission without filler, reconciliation of lost create/submit responses, and JSON text preservation. This is a protocol model, not an end-to-end GitHub or agent tool-use test. Official REST documentation and read-only GraphQL schema inspection support the bodyless submission path; host-specific rejection remains possible and must be reported without adding a body. No real GitHub review was created, submitted, or approved for evaluation. Git lifecycle and agent-selection execution were not rerun because those paths were unchanged; their historical results below are not new v1.2.0 observations.
+
+Release archives were checked against all 32 frozen package files. Managed installation, installed-file parity and fresh host discovery are verified during delivery, separately from the semantic scores. Use a fresh chat to load updated skills.
+
+## Historical v1.1.0 evaluation results
 
 The final candidate passed the causal review and focused private-regression gates below. Priority calibration and token use have material limitations; these results are bounded observations, not a guarantee of future review accuracy.
 

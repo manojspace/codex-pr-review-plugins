@@ -1,6 +1,6 @@
 # Security Review Cases
 
-All identities are synthetic. Each case states its own pinned reachability and trust contract. Supply only Inputs to fresh review-only reviewers; withhold Expected Assessments. Ask for actor, entry point, violated boundary, consequence, severity rationale and safe correction. No live requests or secrets are needed. A severe-sounding API name alone never establishes P0.
+All identities are synthetic. Each case states its own pinned reachability and trust contract. Supply only Inputs to fresh review-only reviewers; withhold Expected Assessments. Ask for actor, entry point, violated boundary, consequence, impact rationale and safe correction. No live requests or secrets are needed. A severe-sounding API name alone never establishes critical impact; omit priority codes.
 
 ## Inputs
 
@@ -132,7 +132,7 @@ An authenticated preferences endpoint treats body.userId as an optional target s
 
 | Case | Expected assessment |
 | --- | --- |
-| SEC01 | Confirm authorization defect: authenticated non-manager can disable another member's access. Guard before loading/destructive effects and scope the target. P1 is supportable from this concrete impact; do not label unconditional P0 or dismiss the unchanged missing guard. |
+| SEC01 | Confirm authorization defect: authenticated non-manager can disable another member's access. Guard before loading/destructive effects and scope the target. Explain why this concrete impact blocks readiness; do not inflate it or dismiss the unchanged missing guard. |
 | SEC02 | No authorization finding; account for guard order, ownership and fail-closed checks. |
 | SEC03 | Confirm request-controlled policy bypass. Read authoritative project restriction under the existing authorization model; the unsafe sibling does not justify the copy. |
 | SEC03C | No request-controlled restriction finding. |
@@ -140,7 +140,7 @@ An authenticated preferences endpoint treats body.userId as an optional target s
 | SEC04C | No cross-environment deletion finding. |
 | SEC05 | No demonstrated stored-XSS finding; trace sanitization through the real sinks. |
 | SEC05H | Confirm stored XSS at the unsanitized sink. Escape the text interpolation or use the established sanitizer at all sinks; do not rely on sanitization in other consumers. |
-| SEC06 | Confirm unauthenticated cross-owner mutation, with actor, entry point and impact. Register behind session guard and assert booking access before mutation. Material/blocking severity is justified; unconditional P0 is not. |
+| SEC06 | Confirm unauthenticated cross-owner mutation, with actor, entry point and impact. Register behind session guard and assert booking access before mutation. Material/blocking impact is justified; explain it without priority codes or unsupported urgency. |
 | SEC06C | No guard-order or ownership finding. |
 | SEC07 | Confirm direct CI execution failure for the release script; restore its executable bit. No defect inferred for executable documentation. |
 | SEC07C | No direct-execution failure on supplied callers. |
@@ -154,7 +154,7 @@ An authenticated preferences endpoint treats body.userId as an optional target s
 | SEC11C | No ownership race under the supplied conditional update. |
 | SEC12 | Confirm SSRF/token exposure. Validate every resolved redirect destination and prevent DNS/rebinding races with the established network client; do not quote token values. |
 | SEC12C | No demonstrated redirect SSRF finding. |
-| SEC13 | Confirm mass-assignment privilege escalation. Build an explicit allowlisted update and enforce ownership; severity follows this escalation, not a universal P0 rule. |
+| SEC13 | Confirm mass-assignment privilege escalation. Build an explicit allowlisted update and enforce ownership; impact follows this escalation; omit priority codes and unsupported urgency. |
 | SEC13C | No mass-assignment finding. |
 | SEC14 | Confirm SQL injection/tenant data exposure. Use driver parameter binding and retain trusted tenant scope; do not suggest hand-escaped concatenation. |
 | SEC14C | No SQL injection finding. |

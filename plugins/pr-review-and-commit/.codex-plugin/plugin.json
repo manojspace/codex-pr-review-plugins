@@ -1,7 +1,7 @@
 {
   "name": "pr-review-and-commit",
-  "version": "1.1.0",
-  "description": "Review connected GitHub PRs, apply accepted fixes, commit, push, and summarize each PR.",
+  "version": "1.2.0",
+  "description": "Review connected GitHub PRs, apply authorized fixes, commit, push, and submit requested reviews.",
   "author": {
     "name": "Manoj Swami",
     "url": "https://github.com/manojspace"
@@ -18,8 +18,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "PR-Review and Commit",
-    "shortDescription": "Review, fix, push, and summarize linked PRs.",
-    "longDescription": "Reviews connected GitHub pull requests with goal-based task names and portable repository discovery, applies evidence-backed fixes, commits as ai review, non-force pushes to verified PR head branches, and posts an outcome summary on every PR.",
+    "shortDescription": "Review, fix, and deliver PRs",
+    "longDescription": "Reviews GitHub PRs with concrete findings without priority codes, applies authorized fixes, commits as ai review, and non-force pushes to verified heads. Requested comments submit only inline findings as Request changes with no review body; requested approval submits directly with no body.",
     "developerName": "Manoj Swami",
     "category": "Productivity",
     "capabilities": [

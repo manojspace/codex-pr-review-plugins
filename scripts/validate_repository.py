@@ -19,14 +19,14 @@ README_PATH = ROOT / "README.md"
 EXPECTED_PLUGINS = ("github-pr-review-fix", "pr-review-and-commit")
 EXPECTED_REPOSITORY = "https://github.com/manojspace/codex-pr-review-plugins"
 SHARED_REFERENCES = (
-    "review-gates.md", "security.md", "database-schema.md", "database-runtime.md",
+    "review-gates.md", "review-actions.md", "security.md", "database-schema.md", "database-runtime.md",
     "providers-and-timing.md", "frontend.md", "structure.md", "artifacts-and-packages.md",
 )
 FIXTURES = (
     "task-title-cases.md", "timeout-review-cases.md", "error-handling-review-cases.md",
     "failure-recording-review-cases.md", "security-review-cases.md",
     "test-evidence-review-cases.md", "database-review-cases.md",
-    "consistency-review-cases.md", "pr-process-review-cases.md",
+    "consistency-review-cases.md", "pr-process-review-cases.md", "review-action-cases.md",
 )
 SIZE_LIMITS = {"SKILL.md": 12000, "review-gates.md": 18000, "workflow.md": 16000,
                "subagents.md": 6500, "fix-policy.md": 6500}

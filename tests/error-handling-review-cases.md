@@ -603,7 +603,7 @@ Review semantics only. A changed adapter accepts startTime and assistantIds. Aft
 | Case | Expected assessment |
 | --- | --- |
 | E54 | No confirmed false-completion defect: the verified primary effect satisfies the explicit success promise and optional failure is recorded. Do not invent a remote-state or required-assistant guarantee. |
-| E54H | P2 false completion: success and UI confirmation promise both required fields, but only the schedule is confirmed. Report partial completion or reconcile the required assistant effect; preserve the completed schedule and do not prescribe a blind whole-operation retry. Remote assistant state remains unverified. |
+| E54H | False completion: success and UI confirmation promise both required fields, but only the schedule is confirmed. Report partial completion or reconcile the required assistant effect; preserve the completed schedule and do not prescribe a blind whole-operation retry. Remote assistant state remains unverified. |
 | E54I | Evidence gap: establish requiredness and consumer/reporting contract before a confirmed finding, priority or blocking disposition. A request field and success envelope alone do not prove false completion. |
 
 | Case | Expected assessment and required causal reasoning |

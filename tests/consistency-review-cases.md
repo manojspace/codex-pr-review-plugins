@@ -172,7 +172,7 @@ The PR adds a member-selection screen whose Save button is disabled when selecte
 | C04C | No copy-drift finding. |
 | C05 | Confirm copy/lookup behavior drift and use the existing helper. Trace numeric-versus-string semantics; do not replace with an incompatible numeric-only helper. |
 | C05C | No lookup-copy finding. |
-| C06 | One series-level P3 maintenance finding naming both copies; add the required counterpart/sync mechanism or obtain a deliberate policy decision. Do not mandate a new shared package. |
+| C06 | One series-level maintenance finding naming both copies; add the required counterpart/sync mechanism or obtain a deliberate policy decision. Do not mandate a new shared package. |
 | C06C | No duplication-only finding. |
 | C07 | No parity finding; trusted policy outranks unsafe sibling practice. Never suggest restoring payload logging. |
 | C08 | Confirm privacy/recording inconsistency using policy plus serializer contract; counts are supporting evidence, not authority by themselves. Use memberId and the approved redacted serializer. |
@@ -198,7 +198,7 @@ The PR adds a member-selection screen whose Save button is disabled when selecte
 | C18C | No unsafe retry-copy finding. |
 | C19 | Confirm client-clock authorization bypass at the backend boundary. Enforce subscription/time on the server; client countdown remains presentation only. |
 | C19C | No client-clock authorization finding. |
-| C20 | Confirm inaccessible modal interaction. Use the existing accessible dialog primitive preserving those behaviors; no unrelated visual redesign. |
+| C20 | Confirm inaccessible modal interaction. Restore the required labeled dialog, focus and keyboard behavior; reuse a verified accessible dialog primitive if available, without assuming one exists. No unrelated visual redesign. |
 | C20C | No modal accessibility finding on supplied evidence. |
 | C21 | Do not confirm a structural/runtime defect or mandate extraction/lazy loading from size alone. State which responsibility/convention evidence would justify a recommendation. |
 | C22 | No confirmed product defect from backend support alone. Identify the missing UI requirement/empty-state contract as a question if material; do not prescribe enabling empty submissions merely because the endpoint supports them. |

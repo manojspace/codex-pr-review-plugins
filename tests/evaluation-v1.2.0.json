@@ -1,0 +1,177 @@
+{
+  "version": "1.2.0",
+  "date": "2026-10-26",
+  "baseline_commit": "234b1590961f5294f9fc8dd9cc5a2c67ae0412d9",
+  "method": {
+    "contexts": "Fresh input-only review contexts; expected assessments withheld; independently scored. Full matrices use one context per plugin; isolated and repeat runs use separate fresh contexts.",
+    "model_settings": "Inherited session defaults; exact backend model/settings unavailable.",
+    "usage_metrics": "Unavailable; no performance or cost claim.",
+    "raw_evidence": "Retained privately, including first-attempt failures. Public manifest contains hashes and results only.",
+    "oracle_corrections": [
+      "C20: reuse an accessible dialog primitive only if its availability is verified.",
+      "P01: overlapping archive warrants conflict investigation; it does not prove a merge conflict."
+    ]
+  },
+  "package_sha256": {
+    "plugins/github-pr-review-fix/.codex-plugin/plugin.json": "cfe8ae47cc52138dfabb18699bb81f0e4a28b0771be715b206fa126ebf417edc",
+    "plugins/github-pr-review-fix/skills/github-pr-review-fix/SKILL.md": "9e08c39059890b5f521e3b9d4d2e5229d3c351335827d17507ceedd0730ddc31",
+    "plugins/github-pr-review-fix/skills/github-pr-review-fix/agents/openai.yaml": "f3cee75d904cee35c25d5937fbc49a25fb68093ac9269852ce9fabe11f621d6b",
+    "plugins/github-pr-review-fix/skills/github-pr-review-fix/references/artifacts-and-packages.md": "a51c940fb6de64d196b006f98c5580df5df3934425be214dc0b9d3caea54bd46",
+    "plugins/github-pr-review-fix/skills/github-pr-review-fix/references/database-runtime.md": "7afce92f34e08aad64b4c139391fd373dfa2bf85059609b6f6f4a01e9e608da8",
+    "plugins/github-pr-review-fix/skills/github-pr-review-fix/references/database-schema.md": "d43ed49c01dc2bfc0a6b5e63944684959f04cfbbe3aa959898f951040ffa2591",
+    "plugins/github-pr-review-fix/skills/github-pr-review-fix/references/fix-policy.md": "85f05f2a9c23b6212f01c3e489745f444480969646e244126c260da89476c516",
+    "plugins/github-pr-review-fix/skills/github-pr-review-fix/references/frontend.md": "e4082fa9446acc8286100dbbafced90e61ca210167fc79624edc4c59dcf340fc",
+    "plugins/github-pr-review-fix/skills/github-pr-review-fix/references/providers-and-timing.md": "f49bfe7108152ba11273556e67b74fcf828a92c8dfd26ccce9a0c97346e8beda",
+    "plugins/github-pr-review-fix/skills/github-pr-review-fix/references/review-actions.md": "26150b33e5c7e167f1901c4532e7ffe07abb9b691599099119f0b69f6efb4b50",
+    "plugins/github-pr-review-fix/skills/github-pr-review-fix/references/review-gates.md": "1baca817e419ff6b629dde6c88c8b2a309df56a612e0b745cf86a3ca545f29b2",
+    "plugins/github-pr-review-fix/skills/github-pr-review-fix/references/security.md": "b34572278e7372d5fe54c1c814ec2f2b3b80fe41920bbd3f0bf30d77ce5a6549",
+    "plugins/github-pr-review-fix/skills/github-pr-review-fix/references/structure.md": "5a447cd734fb19e1fe388e9a6a6453caf7fafae8c020353cf8c45447a3935856",
+    "plugins/github-pr-review-fix/skills/github-pr-review-fix/references/subagents.md": "ea4a56f28a4fd7f23cfc606c9b1ad64b88023bb805954219c4fbfb623c611660",
+    "plugins/github-pr-review-fix/skills/github-pr-review-fix/references/workflow.md": "bf8e81011d882177574b29742df9b0c9d326d903d17705651ea8d6ed486acedd",
+    "plugins/github-pr-review-fix/skills/github-pr-review-fix/scripts/review_snapshot.py": "3a8f2f8ca77ff826634f80a2930cc073ed5657cfa333634ffce7d6f8802095ae",
+    "plugins/pr-review-and-commit/.codex-plugin/plugin.json": "d5325376158716fd24cfd49df1b496d68bbc3e3262d4d5900926311b81c771dd",
+    "plugins/pr-review-and-commit/skills/pr-review-and-commit/SKILL.md": "5bf06902158383f0a128ba49e47d543da1c8ccc50253d6cb2c0d631239a1a5f0",
+    "plugins/pr-review-and-commit/skills/pr-review-and-commit/agents/openai.yaml": "d53d70964eb48e4f44160a68e268871540915e7d0e6b4b2b9c9ea2d383bb5fda",
+    "plugins/pr-review-and-commit/skills/pr-review-and-commit/references/artifacts-and-packages.md": "a51c940fb6de64d196b006f98c5580df5df3934425be214dc0b9d3caea54bd46",
+    "plugins/pr-review-and-commit/skills/pr-review-and-commit/references/database-runtime.md": "7afce92f34e08aad64b4c139391fd373dfa2bf85059609b6f6f4a01e9e608da8",
+    "plugins/pr-review-and-commit/skills/pr-review-and-commit/references/database-schema.md": "d43ed49c01dc2bfc0a6b5e63944684959f04cfbbe3aa959898f951040ffa2591",
+    "plugins/pr-review-and-commit/skills/pr-review-and-commit/references/fix-policy.md": "0a2a60fe82f96b1764abcaf60e5385ebbd79b189d9695e527133515c9065cfc0",
+    "plugins/pr-review-and-commit/skills/pr-review-and-commit/references/frontend.md": "e4082fa9446acc8286100dbbafced90e61ca210167fc79624edc4c59dcf340fc",
+    "plugins/pr-review-and-commit/skills/pr-review-and-commit/references/providers-and-timing.md": "f49bfe7108152ba11273556e67b74fcf828a92c8dfd26ccce9a0c97346e8beda",
+    "plugins/pr-review-and-commit/skills/pr-review-and-commit/references/review-actions.md": "26150b33e5c7e167f1901c4532e7ffe07abb9b691599099119f0b69f6efb4b50",
+    "plugins/pr-review-and-commit/skills/pr-review-and-commit/references/review-gates.md": "1baca817e419ff6b629dde6c88c8b2a309df56a612e0b745cf86a3ca545f29b2",
+    "plugins/pr-review-and-commit/skills/pr-review-and-commit/references/security.md": "b34572278e7372d5fe54c1c814ec2f2b3b80fe41920bbd3f0bf30d77ce5a6549",
+    "plugins/pr-review-and-commit/skills/pr-review-and-commit/references/structure.md": "5a447cd734fb19e1fe388e9a6a6453caf7fafae8c020353cf8c45447a3935856",
+    "plugins/pr-review-and-commit/skills/pr-review-and-commit/references/subagents.md": "2eb78e2498f39d716e35cbaf9de25610d33a9c1a97a7cbe7199a23a45bc5f43c",
+    "plugins/pr-review-and-commit/skills/pr-review-and-commit/references/workflow.md": "aa7e1a45f1d00cb52b5256c1fadc07c2d6c54b18d8307cd4cb9e42c6a97c3dbe",
+    "plugins/pr-review-and-commit/skills/pr-review-and-commit/scripts/review_snapshot.py": "3a8f2f8ca77ff826634f80a2930cc073ed5657cfa333634ffce7d6f8802095ae"
+  },
+  "fixture_counts_per_plugin": {
+    "consistency-review-cases.md": 39,
+    "database-review-cases.md": 45,
+    "error-handling-review-cases.md": 71,
+    "failure-recording-review-cases.md": 23,
+    "pr-process-review-cases.md": 55,
+    "review-action-cases.md": 26,
+    "security-review-cases.md": 31,
+    "task-title-cases.md": 20,
+    "test-evidence-review-cases.md": 20,
+    "timeout-review-cases.md": 3
+  },
+  "fixture_sha256": {
+    "consistency-review-cases.md": "1a42c958c2f4a2534a8439ac2b569c6c3823806fad8222778ced66d256401c7f",
+    "database-review-cases.md": "68d5fdc357e42869e9ed295dc87ec971c6eb30fc92cf399dd4cb13d7f5878571",
+    "error-handling-review-cases.md": "ef2f0f3610de29bf1bb50b10d8b9b2e70dbba5b38cf4766913e53f59c690f48e",
+    "failure-recording-review-cases.md": "5b08e3889e8a7c4892b8f36c65f8bb2d557618a9300a8bfd2ca16277fc98edf6",
+    "pr-process-review-cases.md": "8f0f50bca3025ac3e299a0b0736dff6c5fd2772490cb8458e1c7a1b878d4e5fe",
+    "review-action-cases.md": "2def6385310843bf7bb0fe6d43ee39b2c5aad3f6bf91923b1d13c39696ccb1e7",
+    "security-review-cases.md": "384dc6ba4009ca0757c801e386caecb2abc4975a577ad0343ac47f5c505b9b2f",
+    "task-title-cases.md": "dd337454d32359035c570fcb194e83c873cc8d38359bfd1f20f0b472259609b6",
+    "test-evidence-review-cases.md": "4f40521104cce3ff57f0df45023ac921908fcfa48764ca098899df0d4bce5cc1",
+    "timeout-review-cases.md": "dcc5b1fb77d3ef00af4cbe96ca3052a4e68e18530b9a08ac7fccce922511672d"
+  },
+  "input_only_sha256": {
+    "consistency-review-cases.md": "e3aeb2a248fd6f2fbfc01eb7f098dfba794e830eda588051fa5b48c6f4a37454",
+    "database-review-cases.md": "b9b942bb4984107da266e514b1fe9c18aaddc3714e7768c70fca345e79bf208c",
+    "error-handling-review-cases.md": "ca1538f9a96ed93b99d525f90a5713f36e32292dd9c475c59cc221a4b3d0ba9d",
+    "failure-recording-review-cases.md": "b2e99bac57a8db7840b57fec452cb3c3435f6a9c93d0fa422bdd9cc3e2580c15",
+    "pr-process-review-cases.md": "dae5c07337b7fddf7c7e79ab566ffec53ccfa4451175258820e5c7fd2637066a",
+    "review-action-cases.md": "542a71e398cea40043ae50fdad99d60249aa16054a238a45faaad9e5eeba7c06",
+    "security-review-cases.md": "b036393bbf4554560812da0fa213e4362d94ca9b26f6eb33e647fb999efe70d3",
+    "task-title-cases.md": "112fc54dee34f4982794dd3fca595e888f098bfe0d00181e8fe38e6a3d54b47a",
+    "test-evidence-review-cases.md": "5f945b83459918b1df3c9321ce53ecd4ffdaffb57c71c271bb555029b9907349",
+    "timeout-review-cases.md": "bd464c639c5fdab889332893f1ba4ff29f913b0791e7afd3710d9a90151f204e"
+  },
+  "assessment_and_repeat_sha256": {
+    "review-fix-assessments.md": "44f86073c58e9bc6863070a3ff1f1d68e4d1f5ee62c0f39a8def82ea9845fa85",
+    "review-commit-assessments.md": "d101d5e2719e09eb353046a16dcfe1164fabdcfba7190d61158036e5a5a1057c",
+    "review-fix-isolated.md": "08166486d7fafd1c810537117706dd3b6a23a9228d26a6d7c7bd45c878193e9d",
+    "review-commit-isolated.md": "77dee6185149bd59e35e0a80e73096019a92c14397f1e6b5071b6c5a0598eef6",
+    "repeat-fix-plain.md": "35430ed62186d7c6a71ad452ac12ec8dbe6deb33d9c698ef2c5aef19f1842f47",
+    "repeat-fix-holdout.md": "f95d3ebd91ef5571188a26c6d50630d583376b9666bf80ddd6d247d59bf58b35",
+    "repeat-commit-plain.md": "951e90ad88cf5bcccda078b07f19623647df08511d00cd01222ff129f278ccca",
+    "repeat-commit-holdout.md": "9282db60a61e86c6fabc6794e262f543ddfa35752916d62ddafb6730d96954b2",
+    "baseline-fix.md": "c16f72fcfc9508380375635b375592370c54ddfc2bda3f2501e765afaef4bb33",
+    "baseline-commit.md": "36e1e88d1199995732270330987b8e5b4b2b1e8545f50aa8f17de3bea35fa2b8",
+    "critical-inputs.md": "b4fff70ca8e913e7b025bbfc3f6d1bda995d59cbeeac3cfd76b2e42843c6196a",
+    "critical-holdouts.md": "bc78ae14b53f469c9dffabaad942e452a1148dbf6fc82d36336387e82d87d644"
+  },
+  "results": {
+    "automated_tests": {
+      "pass": 64
+    },
+    "first_matrix": {
+      "pass": 662,
+      "fail": 4,
+      "total": 666
+    },
+    "review_action_cases_in_matrix": {
+      "pass": 52,
+      "fail": 0
+    },
+    "isolated_rechecks": {
+      "pass": 4,
+      "fail": 0
+    },
+    "additional_critical_contexts": {
+      "pass": 12,
+      "fail": 0
+    },
+    "all_candidate_observations": {
+      "pass": 678,
+      "fail": 4,
+      "total": 682
+    },
+    "baseline_critical_cases": {
+      "pass": 6,
+      "fail": 0
+    },
+    "offline_protocol_model": {
+      "pass": 7,
+      "fail": 0,
+      "results_sha256": "c669a9d4aaca92608ba93af3c0bfd58b7b4c9f570f9ad7cfacb14197800e17dd"
+    }
+  },
+  "first_matrix_failures": [
+    {
+      "plugin": "github-pr-review-fix",
+      "case": "C20",
+      "finding": "pass",
+      "correction": "fail",
+      "reason": "Assumed an existing accessible dialog primitive without evidence.",
+      "isolated_recheck": "pass"
+    },
+    {
+      "plugin": "github-pr-review-fix",
+      "case": "D11",
+      "finding": "pass",
+      "correction": "fail",
+      "reason": "Omitted duplicate audit/remediation before uniqueness rollout.",
+      "isolated_recheck": "pass"
+    },
+    {
+      "plugin": "pr-review-and-commit",
+      "case": "C20",
+      "finding": "pass",
+      "correction": "fail",
+      "reason": "Assumed an existing accessible dialog primitive without evidence.",
+      "isolated_recheck": "pass"
+    },
+    {
+      "plugin": "pr-review-and-commit",
+      "case": "D11",
+      "finding": "pass",
+      "correction": "fail",
+      "reason": "Omitted duplicate audit/remediation before uniqueness rollout.",
+      "isolated_recheck": "pass"
+    }
+  ],
+  "limitations": [
+    "Isolated rechecks supplement but do not erase first-matrix failures.",
+    "Instruction assessments are not application execution or live GitHub mutations.",
+    "Protocol model checks are not an end-to-end agent tool-use or GitHub-host test.",
+    "Baseline comparison does not establish improved causal detection.",
+    "Historical Git lifecycle and agent-selection execution was not repeated for unchanged paths.",
+    "Fresh installed-host discovery is verified separately during release delivery."
+  ]
+}

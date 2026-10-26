@@ -3,5 +3,7 @@
 __pycache__/
 *.pyc
 !tests/*-review-cases.md
+!tests/review-action-cases.md
 !plugins/*/skills/*/references/providers-and-timing.md
+!plugins/*/skills/*/references/review-actions.md
 .private-markers

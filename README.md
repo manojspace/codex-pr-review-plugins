@@ -22,7 +22,7 @@ In the Codex or ChatGPT desktop app, open the Plugins Directory and choose **Add
 | Git ref | `main` |
 | Sparse paths | Leave blank |
 
-The full Git URL `https://github.com/manojspace/codex-pr-review-plugins.git` also works as the source. To pin a release instead of following updates from `main`, use `v1.2.0` as the Git ref.
+The full Git URL `https://github.com/manojspace/codex-pr-review-plugins.git` also works as the source. To pin a release instead of following updates from `main`, use `v1.2.1` as the Git ref.
 
 After adding it, select the **PR Review Plugins** marketplace and install either or both entries:
 
@@ -41,7 +41,7 @@ codex plugin add github-pr-review-fix@pr-review-plugins
 codex plugin add pr-review-and-commit@pr-review-plugins
 ```
 
-For a release-pinned marketplace, replace `main` with `v1.2.0`.
+For a release-pinned marketplace, replace `main` with `v1.2.1`.
 
 To receive updates from the selected ref:
 

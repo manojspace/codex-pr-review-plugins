@@ -1,0 +1,5 @@
+# Source-discovery review input
+
+Review the new `worker.py` lifecycle by inspection only. Its database methods commit independently and return the SQL results directly. `fetch_one` returns one row or `None`; `execute_insert` returns the created ID. Worker invocations do not overlap, and the `preview` namespace belongs exclusively to this worker. Process termination can occur between any two statements; a new process initializes the module again. An external runner invokes `start`, calls `process_item`, then calls `finish` in `finally`; it reports any failure accurately and retries on the next scheduled invocation. No TTL or other cleanup exists.
+
+The unchanged database definitions in this fixture are authoritative for this synthetic environment. Every database connection, including connections opened after restart, enables SQLite foreign_keys before any mutation. SQL constraint failures propagate to the caller. Inspect relevant dependencies as needed. Identify concrete findings, counterevidence, corrections or missing facts. Do not edit or execute the fixture. No expected answer is provided in this directory.

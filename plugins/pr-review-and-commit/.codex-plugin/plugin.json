@@ -1,6 +1,6 @@
 {
   "name": "pr-review-and-commit",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Review connected GitHub PRs, apply authorized fixes, commit, push, and submit requested reviews.",
   "author": {
     "name": "Manoj Swami",

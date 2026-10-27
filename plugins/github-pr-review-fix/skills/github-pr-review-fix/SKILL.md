@@ -34,7 +34,7 @@ Use `PR Review - <goal>` for one distinct host-aware identity, otherwise `<N> PR
 ## Triggered References
 
 - Routes, guards, privileged effects, webhooks, injection, secrets: `references/security.md`.
-- Models, schemas, migrations, database packages: `references/database-schema.md`.
+- Models, schemas, migrations, database packages, or runtime behavior depending on existing constraints: `references/database-schema.md`.
 - Queries, transactions, locks, database concurrency: `references/database-runtime.md`.
 - Providers, timeouts, retries, polling, async work: `references/providers-and-timing.md`.
 - UI lifecycle, state, accessibility, browser behavior: `references/frontend.md`.

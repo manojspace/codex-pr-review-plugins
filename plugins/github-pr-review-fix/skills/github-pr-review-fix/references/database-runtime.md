@@ -22,4 +22,4 @@ Load applicable sections for changed writes, transaction/lock ownership, critica
 - Check replica/cache read-after-write behavior when a stale read can drive an incorrect response or repeated mutation. Strong-read routing, consistency tokens or supported eventual behavior can be sufficient.
 - Where changed comparisons/serialization depend on them, verify numeric precision/range, timezone, NULL and collation semantics against the actual driver/engine contract. Do not assume JavaScript numbers preserve arbitrary database integers or money precision.
 
-Keep confirmed defects separate from unknown topology, generated SQL or isolation settings. Use `database-schema.md` only if resolving the runtime invariant needs a changed schema/deployment contract.
+Keep confirmed defects separate from unknown topology, generated SQL or isolation settings. Use `database-schema.md` when the changed runtime invariant depends on schema constraints or deployment contracts, including unchanged foreign-key actions. Inspect only affected relationships; ordinary query edits do not require a migration audit.

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.1 - 2026-10-27
+
+- Trace persisted resources through interruption, loss of process-local IDs, and a fresh invocation; verify recovery and ownership without requiring perfect immediate cleanup of harmless residual data.
+- Inspect unchanged constraints when they determine changed runtime behavior, including foreign-key deletion actions. Keep ordinary query reviews scoped.
+- Reconcile shared missing evidence across independent reviewers, not only disagreements; distinguish uninspected available sources from concrete access/provenance gaps.
+- Add portable lifecycle controls and a separate unchanged-schema discovery fixture. Preserve review permissions, agent counts, and existing publication behavior; see the evaluation report for actual results and limits.
+
 ## 1.2.0 - 2026-10-26
 
 - Remove priority codes and severity badges from findings, comments, and summaries in both plugins; retain concrete impact, evidence, and fix readiness.

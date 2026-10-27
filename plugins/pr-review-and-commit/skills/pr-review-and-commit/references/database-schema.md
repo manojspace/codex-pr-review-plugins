@@ -1,6 +1,6 @@
 # Database Schema And Deployment
 
-Load for DDL, migrations, model fields, typed/shared schema versions or destructive data-shape changes. Ordinary query edits do not require a migration audit. Discover materially affected readers/writers through bounded contract searches, including unchanged workers and supplied repositories; do not scan an organization or connect to a database by default.
+Load for DDL, migrations, model fields, typed/shared schema versions, destructive data-shape changes, or existing constraints that determine changed runtime outcomes. For runtime-only changes, inspect only relevant constraints and their effects, including delete/update actions, without expanding to a migration audit. Discover materially affected readers/writers through bounded contract searches, including unchanged workers and supplied repositories; do not scan an organization or connect to a database by default.
 
 ## Establish The Separate Sources Of Evidence
 

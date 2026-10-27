@@ -75,6 +75,10 @@ Apply the actual library semantics: native `fetch` can fulfill on HTTP errors; a
 
 Resolve framework/runtime wrappers and rejection policy when detached failures depend on them; use `providers-and-timing.md`. Detachment alone proves neither termination nor safe optional work. Ignored results alone do not establish severity.
 
+### Persistent State Across Attempts
+
+When changed creation, reuse, reset or cleanup can leave state across invocations, trace feasible interruptions at distinct durable effects through a fresh invocation with process-local IDs lost. Establish surviving resources/dependents, ownership and rediscovery, and actual deletion/reconciliation semantics, including unchanged constraints. Check whether cleanup failure prevents later required cleanup or makes the next attempt repeat the failure; recovery must not remove another owner's resources or overwrite newer state. Reuse equivalent traces in the existing coverage ledger and inspect only affected contracts. Stop when recovery or a concrete consequence is established. Residual data alone is not a defect: verified rollback, cascade, bounded retention or reconciliation may be counterevidence. Missing material semantics require bounded source inspection or an explicit evidence gap, not a guessed defect or clean conclusion.
+
 ### Review Completion
 
 Before a clean recommendation, complete material traces and reconcile findings. Deferred fixes do not erase blocking defects; unresolved material contracts require a limited/incomplete conclusion. Unrun unrelated tests need not block inspection-based review. No findings, green checks and agent agreement do not replace missing evidence.

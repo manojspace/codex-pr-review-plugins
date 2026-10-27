@@ -1,5 +1,37 @@
 # Evaluation results
 
+## v1.2.1 — 2026-10-27
+
+The investigation identified both an execution failure and a routing gap: prior instructions already required recovery and completed material traces, but review stopped at per-invocation IDs, and the database-runtime reference limited schema routing to changed schema contracts. Three concurrent independent agents audited the cause, edge cases and efficient validation before edits. The fix explicitly traces persisted state through interruption and a fresh invocation, includes relevant unchanged constraints, and reconciles shared evidence gaps. It adds 1,546 instruction bytes per plugin, with no additional mandatory agents or broad migration audit.
+
+Both frozen packages received all 347 input-only cases in separate fresh contexts. Expected assessments were withheld and independently scored. Fourteen new lifecycle cases cover restart failures, restrictive constraints, ownership, missing evidence, safe cascade/rollback/reconciliation/retention, provider ambiguity and non-SQL resources. Ten prior fixture files are unchanged. Package, fixture and result hashes are in [the evaluation manifest](tests/evaluation-v1.2.1.json).
+
+| Check | Observed result |
+| --- | --- |
+| Automated tests | 64 passed |
+| Repository and skill-format validation | Passed for both packages |
+| First complete fixture matrix | 687 passed, 7 correction-quality failures across 694 assessments |
+| New lifecycle cases, included above | 28/28 passed |
+| Fresh focused rechecks on the same package | 6/7 passed, in two contexts |
+| Additional Review + Fix E36 singleton repeats | 3/3 passed |
+| Source-discovery exercise | Baseline 2/2; candidate 2/2 passed |
+| Disposable SQLite fixture mechanics | 3/3 passed |
+
+The first Review + Fix matrix failed correction criteria for C20, D09, D11 and E36; Review and Commit failed D09, D11 and E36. C20 assumed a reusable accessible component without evidence. D09 omitted provider idempotency/conditional finalization; D11 omitted duplicate remediation before uniqueness; E36 omitted concurrency protection after moving remote work outside a lock. Findings were supported, but those corrections were incomplete. Fresh focused contexts supplied the missing safeguards in six cases. Review + Fix E36 remained under-specified: short coordinated updates did not establish protection from late results overwriting newer state. A fixed batch of three further fresh singleton contexts examined that case using the unchanged package and input; their actual results appear above. These observations supplement rather than erase the seven first-attempt failures and one focused failure. Every required case has a passing assessment on the frozen package, but the first full matrix was not a perfect pass and long-context consistency is not established.
+
+The separate source-discovery fixture places its FK action in an unchanged schema file. All four fresh CLI reviews actually inspected that file, traced a committed child surviving process death through repeated parent-deletion failure, and proposed ownership-safe recovery. A disposable SQLite exercise independently reproduced two successive restart failures and recovery after owned-child cleanup. Neither exercise contacts a production database or performs a real review action.
+
+| Source-discovery run | Input | Cached input | Uncached input | Output | Tool calls | Wall seconds |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| v1.2.0 Review + Fix | 115,317 | 93,952 | 21,365 | 1,889 | 13 | 94.941 |
+| v1.2.1 Review + Fix | 149,651 | 128,000 | 21,651 | 1,669 | 11 | 89.703 |
+| v1.2.0 Review and Commit | 118,793 | 83,456 | 35,337 | 1,748 | 9 | 81.898 |
+| v1.2.1 Review and Commit | 117,851 | 94,848 | 23,003 | 2,434 | 12 | 124.173 |
+
+Input is CLI-reported cumulative input, including cached and repeated context; it is not prompt size or billed cost. Model-call counts, exact served model/settings, and matrix/recheck usage are unavailable. There is one observation per variant/plugin, launch order is counterbalanced, and overlapping runs leave cache/resource state uncontrolled. Both baseline runs passed, so these results establish neither improved detection nor token, cost or latency savings. Coverage is bounded to the supplied cases, not every possible edge case.
+
+Git lifecycle, agent-selection execution and publication boundaries are unchanged; their historical execution results below were not rerun. Release archives are checked against all 32 frozen package files. Supported installation, installed hash parity and fresh host discovery are verified separately during delivery. The current CLI exposes no dedicated plugin-validation command; repository and skill-format validation are the available checks. Use a fresh chat to load updated skills.
+
 ## v1.2.0 — 2026-10-26
 
 Both plugins were evaluated against 333 input-only cases each, including 26 new review-action cases. Expected assessments were withheld from fresh-context reviewers and independently audited before scoring. Reviewers used inherited session settings; exact backend model/settings and per-run usage were not exposed, so no token, latency, or efficiency claim is made. Package, fixture, input, and output hashes are recorded in [the evaluation manifest](tests/evaluation-v1.2.0.json).

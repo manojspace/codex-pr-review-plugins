@@ -27,6 +27,7 @@ FIXTURES = (
     "failure-recording-review-cases.md", "security-review-cases.md",
     "test-evidence-review-cases.md", "database-review-cases.md",
     "consistency-review-cases.md", "pr-process-review-cases.md", "review-action-cases.md",
+    "lifecycle-review-cases.md",
 )
 SIZE_LIMITS = {"SKILL.md": 12000, "review-gates.md": 18000, "workflow.md": 16000,
                "subagents.md": 6500, "fix-policy.md": 6500}
